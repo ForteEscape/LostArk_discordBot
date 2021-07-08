@@ -1,4 +1,5 @@
 import discord
+import os
 from discord.ext import commands
 
 client = commands.Bot(command_prefix='!')
@@ -145,4 +146,4 @@ async def on_command_error(ctx, error):
         await ctx.send("No such command")
 
 
-client.run('ODYxOTczNjkyMjkyMDA1OTA4.YORljg.zYI9ZvVXIhVTE_P8msqVsw3pfHE')
+client.run(os.environ['token'])
