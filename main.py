@@ -145,4 +145,4 @@ async def on_command_error(ctx, error):
         await ctx.send("No such command")
 
 
-client.run('ODYxOTczNjkyMjkyMDA1OTA4.YORljg.r-kGVZGVF-bENS1AGpwdcSURsLc')
+client.run('ODYxOTczNjkyMjkyMDA1OTA4.YORljg.zYI9ZvVXIhVTE_P8msqVsw3pfHE')
