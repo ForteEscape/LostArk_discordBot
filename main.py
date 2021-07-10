@@ -8,11 +8,13 @@ client = commands.Bot(command_prefix='!')
 extensionUnit = ['cogs.CalenderHandler', 'cogs.CommonContentHandler',
                  'cogs.BotEventHandler', 'cogs.PlayerContentHandler',
                  'cogs.CollectionPointsHandler', 'cogs.BossRaidContentHandler',
-                 'cogs.CommandInfoHandler']
+                 'cogs.CommandInfoHandler', 'cogs.BotUpdateLogHandler',
+                 'cogs.FunnyCommandHandler', 'cogs.GuideContentHandler']
 
 if __name__ == '__main__':
     for unit in extensionUnit:
         client.load_extension(unit)
         print(unit + "load successful")
 
-client.run(os.environ['TOKEN'])
+client.run('ODYzMDYwNDExNDE0MjE2NzI0.YOhZpA.fKfFwq1wTE7x3dGHp4Z7Mj05cfw')
+#client.run(os.environ['TOKEN'])

@@ -27,7 +27,7 @@ class CommandInfoHandler(commands.Cog):
                         inline=False)
 
         embed.add_field(name="!이벤트",
-                        value="현재 진행되는 이벤트가 모인 이벤트 페이지 링크를 호출합니다..\n"
+                        value="현재 진행되는 이벤트가 모인 이벤트 페이지 링크를 호출합니다.\n"
                               "ex) !이벤트",
                         inline=False)
 
@@ -42,8 +42,16 @@ class CommandInfoHandler(commands.Cog):
                         inline=False)
 
         embed.add_field(name="!캐릭터정보 [누쿠누쿠, 차차]",
-                        value="각 캐릭터의 정보 링크를 호출합니다..\n"
+                        value="각 캐릭터의 정보 링크를 호출합니다.\n"
                               "ex) !캐릭터정보 나비릴")
+
+        embed.add_field(name="!가이드 [육성, 아이템, 각인, 골드]",
+                        value="게임 시스템 및 여러가지 가이드 정보 링크를 호출합니다.\n"
+                              "ex) !가이드 각인")
+
+        embed.add_field(name="!log",
+                        value="해당 디스코드 봇의 업데이트 내역을 호출합니다.\n"
+                              "ex) !log")
 
         embed.set_footer(text="건의사항 추가사항 받기 가능 그러나 반영 매우 늦음."
                               "각 정보의 경우 텍스트가 될 수도 있고 링크로도 올려질 수 있습니다.")

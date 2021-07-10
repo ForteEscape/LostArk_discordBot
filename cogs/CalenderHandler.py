@@ -7,7 +7,7 @@ class CalenderHandler(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def 이벤트(ctx):
+    async def 이벤트(self, ctx):
         await ctx.send("현재 진행되는 이벤트 페이지를 호출합니다.\n"
                        "https://lostark.game.onstove.com/News/Event/Now")
 
