@@ -16,5 +16,4 @@ if __name__ == '__main__':
         client.load_extension(unit)
         print(unit + "load successful")
 
-client.run('ODYzMDYwNDExNDE0MjE2NzI0.YOhZpA.fKfFwq1wTE7x3dGHp4Z7Mj05cfw')
-#client.run(os.environ['TOKEN'])
+client.run(os.environ['TOKEN'])
