@@ -8,12 +8,7 @@ client = commands.Bot(command_prefix='!')
 @client.event
 async def on_ready():
     print("log in success in as {0.user}".format(client))
-
-
-@client.command()
-async def hello(ctx):
-    await ctx.send("hello world")
-
+    
 
 @client.command()
 async def 이벤트(ctx):
@@ -135,7 +130,7 @@ async def 군단장(ctx, bossname = None, status = None):
 
 
 @client.command()
-async def info(ctx):
+async def 명령어(ctx):
     embed = discord.Embed(title="LOA_helper봇 명령어",
                           description="로스트아크 정보 알려주기 귀찮아서 만듬")
     embed.add_field(name="  !내실 [거심, 섬마, 미술품, 오르페우스, 항해물, 스킬포인트]",
