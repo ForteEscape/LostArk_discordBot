@@ -19,7 +19,7 @@ class PlayerContentHandler(commands.Cog):
                       '절정각인서': 'https://loawa.com/char/%EC%A0%88%EC%A0%95%EA%B0%81%EC%9D%B8%EC%84%9C',
                       '체맛건': 'https://loawa.com/char/%EC%B2%B4%EB%A6%AC%EB%A7%9B%EB%82%98%EB%8A%94%EA%B1%B4%EC%8A%AC',
                       '귤남': 'https://loawa.com/char/%EA%B0%90%EA%B7%A4%EB%86%8D%EC%9E%A5%EC%83%81%EB%82%A8%EC%9E%90',
-                      '캬떡': 'https://loawa.com/char/%EA%B7%B8%EB%A3%A8%ED%86%A4%EC%BD%94%EC%9D%B8%EC%83%B5',
+                      '쌀떡': 'https://loawa.com/char/%EA%B7%B8%EB%A3%A8%ED%86%A4%EC%BD%94%EC%9D%B8%EC%83%B5',
                       '따별': 'https://loawa.com/char/MaiR',
                       '차비': 'https://loawa.com/char/%EC%AE%B8%EC%98%A4%EC%98%A5',
                       '고희원': 'https://loawa.com/char/%EA%B3%A0%ED%9D%AC%EC%9B%90',
@@ -33,7 +33,9 @@ class PlayerContentHandler(commands.Cog):
                                   description="!캐릭터정보 명령어에 대하여 설명합니다.")
             embed.add_field(name="!캐릭터정보 [누쿠누쿠, 차차]",
                             value="각 캐릭터의 정보 링크를 호출합니다.\n"
-                                  "ex) !캐릭터정보 나비릴")
+                                  "사용 가능한 이름들\n"
+                                  "유파민, 나비릴, 릴리찐따, 풀피, 누쿠누쿠, 차차, 댕루, 우깡, 절정각인서, 체맛건, 귤남, 쌀떡, 따별, 차비, 고희원\n"
+                                  "뭉클, 마마, 워붕쿤, 티인")
             await ctx.send(embed=embed)
         else:
             if player in player_dic:
