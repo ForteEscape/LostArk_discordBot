@@ -34,6 +34,7 @@ class PlayerContentHandler(commands.Cog):
             embed.add_field(name="!캐릭터정보 [누쿠누쿠, 차차]",
                             value="각 캐릭터의 정보 링크를 호출합니다.\n"
                                   "사용 가능한 이름들\n"
+                                  "======================================\n"
                                   "유파민, 나비릴, 릴리찐따, 풀피, 누쿠누쿠, 차차, 댕루, 우깡, 절정각인서, 체맛건, 귤남, 쌀떡, 따별, 차비, 고희원\n"
                                   "뭉클, 마마, 워붕쿤, 티인")
             await ctx.send(embed=embed)
