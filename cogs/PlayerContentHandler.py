@@ -27,7 +27,8 @@ class PlayerContentHandler(commands.Cog):
                       '마마': 'https://loawa.com/char/%EB%A7%88%EB%A7%88%EB%A0%88%ED%9B%84',
                       '야스치이': 'https://loawa.com/char/2nd%EC%BB%B4%ED%8C%A8%EB%8B%88%EC%96%B8',
                       '워붕쿤': 'https://loawa.com/char/210301%EC%8B%9C%EC%9E%91',
-                      '티인': 'https://loawa.com/char/%EB%84%A4%EC%BD%94%EB%A7%88%EC%B8%A0%EB%A6%AC'
+                      '티인': 'https://loawa.com/char/%EB%84%A4%EC%BD%94%EB%A7%88%EC%B8%A0%EB%A6%AC',
+                      '대주': 'https://loawa.com/char/%EB%8C%80%EC%A5%AC%EC%9D%B8'
                       }
         if player == None:
             embed = discord.Embed(title="!캐릭터정보 명령어 설명",
@@ -37,7 +38,7 @@ class PlayerContentHandler(commands.Cog):
                                   "사용 가능한 이름들\n"
                                   "======================================\n"
                                   "유파민, 나비릴, 릴리찐따, 풀피, 누쿠누쿠, 차차, 댕루, 우깡, 절정각인서, 체맛건, 귤남, 쌀떡, 따별, 차비, 고희원\n"
-                                  "뭉클, 마마, 워붕쿤, 티인, 야스치이")
+                                  "뭉클, 마마, 워붕쿤, 티인, 야스치이, 대주인")
             await ctx.send(embed=embed)
         else:
             if player in player_dic:
