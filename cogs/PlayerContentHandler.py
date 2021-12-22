@@ -8,6 +8,24 @@ class PlayerContentHandler(commands.Cog):
 
     @commands.command()
     async def 캐릭터정보(self, ctx, player=None):
+        player_nickname_list = {
+            ['나비릴', '노비릴'],
+            ['릴리찐따', '릴찐'],
+            ['풀피', '소세지', '퍽피', '대학원생'],
+            ['누쿠누쿠', '누무누무', '느크', '노쿠'],
+            ['캬떡', '쌀떡'],
+            ['차비'],
+            ['마마', '마마레후'],
+            ['야스치이', '컴패'],
+            ['워붕쿤', '워붕이'],
+            ['대주', '대주인', '머주'],
+            ['나그없']
+        }
+
+        for nicknameList in player_nickname_list:
+            if player in nicknameList:
+                player = nicknameList[0]
+
         player_dic = {'유파민': 'https://loawa.com/char/%EC%9C%A0%ED%8C%8C%EB%AF%BC',
                       '나비릴': 'https://loawa.com/char/%EC%95%84%EB%93%9D%EB%B0%94%EB%93%9D%EC%97%B0%EA%B5%AC%EC%86%8C',
                       '릴리찐따': 'https://loawa.com/char/%EB%A6%B4%EB%A6%AC%EC%B0%90%EB%94%B0',
@@ -16,7 +34,6 @@ class PlayerContentHandler(commands.Cog):
                       '차차': 'https://loawa.com/char/%EC%8A%A8%EC%83%81%EC%9D%98%EB%B9%9B',
                       '댕루': 'https://loawa.com/char/%EC%96%B4%ED%9D%A5%ED%8E%80%EC%B9%98%EB%8B%A4%EB%83%A5',
                       '우깡': 'https://loawa.com/char/%EB%A7%9B%EC%9E%88%EB%8A%94%EC%83%88%EC%9A%B4%EB%A7%A4%EC%9A%B0%EA%B9%A1',
-                      '절정각인서': 'https://loawa.com/char/%EC%A0%88%EC%A0%95%EA%B0%81%EC%9D%B8%EC%84%9C',
                       '체맛건': 'https://loawa.com/char/%EC%B2%B4%EB%A6%AC%EB%A7%9B%EB%82%98%EB%8A%94%EA%B1%B4%EC%8A%AC',
                       '귤남': 'https://loawa.com/char/%EA%B0%90%EA%B7%A4%EB%86%8D%EC%9E%A5%EC%83%81%EB%82%A8%EC%9E%90',
                       '쌀떡': 'https://loawa.com/char/%EA%B7%B8%EB%A3%A8%ED%86%A4%EC%BD%94%EC%9D%B8%EC%83%B5',
@@ -28,7 +45,8 @@ class PlayerContentHandler(commands.Cog):
                       '야스치이': 'https://loawa.com/char/2nd%EC%BB%B4%ED%8C%A8%EB%8B%88%EC%96%B8',
                       '워붕쿤': 'https://loawa.com/char/210301%EC%8B%9C%EC%9E%91',
                       '티인': 'https://loawa.com/char/%EB%84%A4%EC%BD%94%EB%A7%88%EC%B8%A0%EB%A6%AC',
-                      '대주': 'https://loawa.com/char/%EB%8C%80%EC%A5%AC%EC%9D%B8'
+                      '대주': 'https://loawa.com/char/%EB%8C%80%EC%A5%AC%EC%9D%B8',
+                      '나그없': ''
                       }
         if player == None:
             embed = discord.Embed(title="!캐릭터정보 명령어 설명",
