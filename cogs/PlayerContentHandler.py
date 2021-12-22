@@ -8,6 +8,23 @@ class PlayerContentHandler(commands.Cog):
 
     @commands.command()
     async def 캐릭터정보(self, ctx, player=None):
+        player_nickname_list = [
+            ['나비릴', '노비릴'],
+            ['릴리찐따', '릴찐'],
+            ['풀피', '소세지', '퍽피', '대학원생'],
+            ['누쿠누쿠', '누무누무', '누쿠', '노쿠'],
+            ['캬떡', '쌀떡'],
+            ['차비'],
+            ['마마', '마마레후'],
+            ['야스치이', '컴패'],
+            ['워붕쿤', '워붕이'],
+            ['대주', '대주인', '머주'],
+            ['나그없']
+        ]
+
+        for nicknameList in player_nickname_list:
+            if player in nicknameList:
+                player = nicknameList[0]
 
         player_dic = {'유파민': 'https://loawa.com/char/%EC%9C%A0%ED%8C%8C%EB%AF%BC',
                       '나비릴': 'https://loawa.com/char/%EC%95%84%EB%93%9D%EB%B0%94%EB%93%9D%EC%97%B0%EA%B5%AC%EC%86%8C',
