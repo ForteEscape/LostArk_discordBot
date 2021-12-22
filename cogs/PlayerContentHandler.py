@@ -56,7 +56,7 @@ class PlayerContentHandler(commands.Cog):
                                   "사용 가능한 이름들\n"
                                   "======================================\n"
                                   "유파민, 나비릴, 릴리찐따, 풀피, 누쿠누쿠, 차차, 댕루, 우깡, 절정각인서, 체맛건, 귤남, 쌀떡, 따별, 차비, 고희원\n"
-                                  "뭉클, 마마, 워붕쿤, 티인, 야스치이, 대주인")
+                                  "뭉클, 마마, 워붕쿤, 티인, 야스치이, 대주인, 나그없")
             await ctx.send(embed=embed)
         else:
             if player in player_dic:
