@@ -46,7 +46,7 @@ class PlayerContentHandler(commands.Cog):
                       '워붕쿤': 'https://loawa.com/char/210301%EC%8B%9C%EC%9E%91',
                       '티인': 'https://loawa.com/char/%EB%84%A4%EC%BD%94%EB%A7%88%EC%B8%A0%EB%A6%AC',
                       '대주': 'https://loawa.com/char/%EB%8C%80%EC%A5%AC%EC%9D%B8',
-                      '나그없': ''
+                      '나그없': 'https://loawa.com/char/%EC%9A%B0%ED%95%9C%EC%8B%A4%EC%9C%A0%ED%86%B5',
                       }
         if player == None:
             embed = discord.Embed(title="!캐릭터정보 명령어 설명",
