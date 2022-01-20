@@ -323,7 +323,7 @@ class GuideContentHandler(commands.Cog):
             ['황제의 칙령', '황제', '칙령'],
             ['황후의 은총', '황후', '은총'],
             ['일격필살', '일필'],
-            ['오의난무', '오의스커'],
+            ['오의난무', '오의스커']
         ]
 
         for engrave_nickname in engrave_nickname_list:
