@@ -326,10 +326,6 @@ class GuideContentHandler(commands.Cog):
             ['오의난무', '오의스커']
         ]
 
-        for engrave_nickname in engrave_nickname_list:
-            if input_data in engrave_nickname:
-                input_data = engrave_nickname[0]
-
         if not input_data:
             embed = discord.Embed(title="!각인 명령어 설명",
                                   description="!각인 명령어에 대하여 설명합니다.")
@@ -337,6 +333,10 @@ class GuideContentHandler(commands.Cog):
                             value="각 각인의 설명을 호출합니다.\n")
             await ctx.send(embed=embed)
         else:
+            for engrave_nickname in engrave_nickname_list:
+                if input_data in engrave_nickname:
+                    input_data = engrave_nickname[0]
+
             if input_data in engrave_diclist:
                 embed = discord.Embed(title=input_data + " 각인 설명",
                                       description=engrave_diclist[input_data])
