@@ -256,7 +256,7 @@ class GuideContentHandler(commands.Cog):
             '회귀': '(도화가 전용) 저무는 달 및 떠오르는 해 스킬 사용 시, 자신에게 60초 동안 치명타 적중률 6%/9%/12% 및 치명타 피해가 20%/30%/40% 증가하는 효과를 부여한다.',
 
             '만개': ('(도화가 전용) 해 구슬 획득 시 떠오르는 해의 기운이 널리 퍼져 구슬을 획득한 대상을 포함한 24m 범위 내에 있는 파티원에게 '
-                   '도화가의 최대 생명력 7%/11%/15%에 해당하는 생명력을 회복시킨다'),
+                   '도화가의 최대 생명력 7%/11%/15%에 해당하는 생명력을 회복시킨다')
         }
 
         engrave_nickname_list = [
@@ -333,10 +333,6 @@ class GuideContentHandler(commands.Cog):
                             value="각 각인의 설명을 호출합니다.\n")
             await ctx.send(embed=embed)
         else:
-            for engrave_nickname in engrave_nickname_list:
-                if input_data in engrave_nickname:
-                    input_data = engrave_nickname[0]
-
             if input_data in engrave_diclist:
                 embed = discord.Embed(title=input_data + " 각인 설명",
                                       description=engrave_diclist[input_data])
