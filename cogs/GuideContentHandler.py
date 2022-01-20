@@ -306,7 +306,7 @@ class GuideContentHandler(commands.Cog):
             ['아르데타인의 기술', '기술'],
             ['역천지체', '역천'],
             ['포격 강화', '포강', '포격'],
-            ['오의 강화', '오의']
+            ['오의 강화', '오의'],
             ['완벽한 억제', '억제'],
             ['잔재된 기운', '잔재'],
             ['전투 태세', '전태'],
@@ -325,6 +325,10 @@ class GuideContentHandler(commands.Cog):
             ['일격필살', '일필'],
             ['오의난무', '오의스커']
         ]
+
+        for engrave_nickname in engrave_nickname_list:
+            if input_data in engrave_nickname:
+                input_data = engrave_nickname[0]
 
         if not input_data:
             embed = discord.Embed(title="!각인 명령어 설명",
