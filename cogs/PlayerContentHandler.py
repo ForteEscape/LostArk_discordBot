@@ -69,10 +69,20 @@ class PlayerContentHandler(commands.Cog):
                                   "유파민, 나비릴, 릴리찐따, 풀피, 누쿠누쿠, 차차, 댕루, 우깡, 절정각인서, 체맛건, 귤남, 쌀떡, 따별, 차비, 고희원\n"
                                   "뭉클, 마마, 워붕쿤, 티인, 야스치이, 대주인, 나그없")
             await ctx.send(embed=embed)
-        elif player == '아이엠말보로':
-            await ctx.send('아이엠말보로 길드 전체인원 리스트를 호출합니다. \n' + 'https://www.mgx.kr/lostark/guild/search/?guild_name=아이엠말보로')
         else:
             await ctx.send(nickname + ' 의 정보를 호출합니다.\n' + 'https://www.mgx.kr/lostark/character/?character_name=' + player)
+
+    @commands.command()
+    async def 길드정보(self, ctx, guild=None):
+        if guild == None:
+            embed = discord.Embed(title="!길드정보 명령어 설명",
+                                  description="!길드정보 명령어에 대하여 설명합니다.")
+            embed.add_field(name="!길드정보 [아이엠말보로]",
+                            value="입력으로 받은 길드의 정보를 호출합니다.")
+
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send(guild + ' 길드의 정보를 호출합니다.\n' + 'https://www.mgx.kr/lostark/guild/search/?guild_name=' + guild)
 
 
 def setup(bot):
