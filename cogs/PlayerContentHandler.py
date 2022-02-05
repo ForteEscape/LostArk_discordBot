@@ -9,23 +9,32 @@ class PlayerContentHandler(commands.Cog):
     @commands.command()
     async def 캐릭터정보(self, ctx, player=None):
         player_nickname_list = [
-            ['나비릴', '노비릴'],
+            ['아득바득연구소', '나비릴', '노비릴'],
             ['릴리찐따', '릴찐'],
-            ['풀피', '소세지', '퍽피', '대학원생'],
-            ['누쿠누쿠', '누무누무', '누쿠', '노쿠'],
-            ['쌀떡', '캬떡'],
-            ['차비'],
-            ['마마', '마마레후'],
-            ['야스치이', '컴패'],
-            ['워붕쿤', '워붕이'],
-            ['대주', '대주인', '머주'],
-            ['나그없']
+            ['퍽피', '풀피', '소세지', '퍽피', '대학원생'],
+            ['윗집층간소음민폐녀', '누무누무', '누쿠', '노쿠'],
+            ['그루톤코인샵', '캬떡'],
+            ['쮸오옥', '차비'],
+            ['마마레후', '마마'],
+            ['2nd컴패니언', '컴패', '야스치이'],
+            ['210301시작', '워붕쿤', '워붕이'],
+            ['대쥬인', '대주인', '머주', '대주'],
+            ['우한실유통', '나그없'],
+            ['체리맛나는건슬', '체맛건'],
+            ['MaiR', '따별'],
+            ['어흥펀치다냥', '댕루'],
+            ['맛있는새운매우깡', '우깡'],
+            ['아기댕쟝', '뭉클'],
+            ['감귤농장상남자', '귤남'],
+            ['네코마츠리', '티인'],
         ]
 
+        nickname = player
         for nicknameList in player_nickname_list:
             if player in nicknameList:
                 player = nicknameList[0]
 
+        """
         player_dic = {'유파민': 'https://loawa.com/char/%EC%9C%A0%ED%8C%8C%EB%AF%BC',
                       '나비릴': 'https://loawa.com/char/%EC%95%84%EB%93%9D%EB%B0%94%EB%93%9D%EC%97%B0%EA%B5%AC%EC%86%8C',
                       '릴리찐따': 'https://loawa.com/char/%EB%A6%B4%EB%A6%AC%EC%B0%90%EB%94%B0',
@@ -48,6 +57,8 @@ class PlayerContentHandler(commands.Cog):
                       '대주': 'https://loawa.com/char/%EB%8C%80%EC%A5%AC%EC%9D%B8',
                       '나그없': 'https://loawa.com/char/%EC%9A%B0%ED%95%9C%EC%8B%A4%EC%9C%A0%ED%86%B5',
                       }
+        """
+
         if player == None:
             embed = discord.Embed(title="!캐릭터정보 명령어 설명",
                                   description="!캐릭터정보 명령어에 대하여 설명합니다.")
@@ -59,10 +70,7 @@ class PlayerContentHandler(commands.Cog):
                                   "뭉클, 마마, 워붕쿤, 티인, 야스치이, 대주인, 나그없")
             await ctx.send(embed=embed)
         else:
-            if player in player_dic:
-                await ctx.send(player + ' 의 정보를 호출합니다.\n' + player_dic[player])
-            else:
-                await ctx.send(player + '은 추가되지 않았거나 이 디스코드에 없는 사람입니다.\n')
+            await ctx.send(nickname + ' 의 정보를 호출합니다.\n' + 'https://www.mgx.kr/lostark/character/?character_name=' + player)
 
 
 def setup(bot):
