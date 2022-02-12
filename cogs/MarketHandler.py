@@ -29,6 +29,9 @@ class MarketHandler(commands.Cog):
 
         driver.get('http://www.naver.com')
 
+        page_source = driver.page_source
+
+        await ctx.send("naver " + page_source)
         """
         driver.get('http://lostark.game.onstove.com/Market')
 
