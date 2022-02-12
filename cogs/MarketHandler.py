@@ -25,23 +25,26 @@ class MarketHandler(commands.Cog):
         driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-
         driver.get('https://lostark.game.onstove.com/Market')
 
         driver.find_element(By.NAME, "user_id").send_keys('sehun8631@naver.com')
+        driver.implicitly_wait(10)
         sleep(2)
         driver.find_element(By.NAME, "user_pwd").send_keys('kk2924140**')
+        driver.implicitly_wait(10)
         sleep(2)
         driver.find_element(By.CLASS_NAME, "btn-text").click()
-
+        driver.implicitly_wait(10)
         sleep(2)
 
         driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[2]/a[2]').click()
+        driver.implicitly_wait(10)
         price_data = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
-
+        driver.implicitly_wait(10)
         sleep(2)
 
         driver.find_element(By.XPATH, '//*[@id="marketList"]/div[2]/a[3]').click()
+        driver.implicitly_wait(10)
         sleep(1)
         price_data2 = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
 
