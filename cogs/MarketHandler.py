@@ -24,6 +24,8 @@ class MarketHandler(commands.Cog):
 
         driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
+
         driver.get('https://lostark.game.onstove.com/Market')
 
         driver.find_element(By.NAME, "user_id").send_keys('sehun8631@naver.com')
