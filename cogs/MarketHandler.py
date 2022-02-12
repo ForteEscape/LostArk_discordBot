@@ -22,8 +22,8 @@ class MarketHandler(commands.Cog):
         chrome_options.add_argument("--no-sandbox")
         chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
-        #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+        #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         driver.get('https://lostark.game.onstove.com/Market')
 
         driver.find_element(By.NAME, "user_id").send_keys('sehun8631@naver.com')
