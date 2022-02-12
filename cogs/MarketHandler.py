@@ -27,8 +27,9 @@ class MarketHandler(commands.Cog):
         #driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-        driver.get('http://www.naver.com')
 
+        driver.get("http://www.naver.com")
+        sleep(2)
         page_source = driver.page_source
 
         await ctx.send("naver " + page_source)
