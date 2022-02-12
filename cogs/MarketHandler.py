@@ -48,6 +48,8 @@ class MarketHandler(commands.Cog):
         sleep(1)
         price_data2 = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
 
+        await ctx.send("sucess")
+
         data_price = price_data + '\n' + price_data2
         data_price_list = data_price.split('\n')
         data_list = []
