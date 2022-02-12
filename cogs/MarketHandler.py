@@ -17,12 +17,12 @@ class MarketHandler(commands.Cog):
     @commands.command()
     async def 시세요약(self, ctx):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--no-sandbox")
+        chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
 
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+        driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         driver.get('https://lostark.game.onstove.com/Market')
 
@@ -90,14 +90,6 @@ class MarketHandler(commands.Cog):
 
         for index in data_2d_list:
             output.add_row(index)
-        """
-        output = table2ascii(
-            header=["이름", "전날가", "최근가", "최저가"],
-            body=data_2d_list,
-            style=PresetStyle.thick_compact,
-            alignments=[Alignment.LEFT]*4,
-        )
-        """
 
         await ctx.send(f"```\n{output}\n```")
 
