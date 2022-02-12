@@ -16,23 +16,18 @@ class MarketHandler(commands.Cog):
 
     @commands.command()
     async def 시세요약(self, ctx):
-
-        CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-        GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
-
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.getenv(GOOGLE_CHROME_BIN)
+        chrome_options.binary_location = os.getenv('GOOGLE_CHROME_BIN')
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(executable_path=os.getenv(CHROMEDRIVER_PATH), chrome_options=chrome_options)
+        await ctx.send("working")
+        driver = webdriver.Chrome(executable_path=os.getenv('CHROMEDRIVER_PATH'), chrome_options=chrome_options)
 
         #driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
         driver.get('http://www.naver.com')
-
-        await ctx.send(driver.page_source)
 
         """
         driver.get('http://lostark.game.onstove.com/Market')
