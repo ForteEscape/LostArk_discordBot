@@ -26,6 +26,11 @@ class MarketHandler(commands.Cog):
         #driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
+        driver.get('https://www.naver.com')
+
+        await ctx.send(driver.page_source)
+
+        """
         driver.get('https://lostark.game.onstove.com/Market')
 
         driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('sehun8631@naver.com')
@@ -100,6 +105,7 @@ class MarketHandler(commands.Cog):
             output.add_row(index)
 
         await ctx.send(f"```\n{output}\n```")
+        """
 
 
 def setup(bot):
