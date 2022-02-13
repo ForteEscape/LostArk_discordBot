@@ -36,7 +36,7 @@ class MarketHandler(commands.Cog):
 
         try:
             await ctx.send("working - driver.get...")
-            driver.get("naver.com")
+            driver.get("https://www.naver.com")
             page = driver.page_source
 
             await ctx.send(page)
