@@ -41,9 +41,7 @@ class MarketHandler(commands.Cog):
             driver.get('https://lostark.game.onstove.com/Market/BookMark')
             driver.implicitly_wait(10)
 
-            await ctx.send(driver.find_element(By.XPATH, '//*[@id="user_id"]').text)
-            await ctx.send(driver.find_element(By.XPATH, '//*[@id="user_pwd"]').text)
-            await ctx.send(driver.find_element(By.XPATH, '//*[@id="user_pwd"]').text)
+            await ctx.send(driver.current_url)
 
             driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('sehun8631@naver.com')
             driver.implicitly_wait(10)
@@ -61,9 +59,7 @@ class MarketHandler(commands.Cog):
             driver.implicitly_wait(10)
             """
 
-            await ctx.send(driver.find_element(By.XPATH, '//*[@id="user_id"]').text)
-            await ctx.send(driver.find_element(By.XPATH, '//*[@id="user_pwd"]').text)
-            await ctx.send(driver.find_element(By.XPATH, '//*[@id="user_pwd"]').text)
+            await ctx.send(driver.current_url)
 
             page = driver.page_source
             await ctx.send(page[10500:12000])
