@@ -4,9 +4,7 @@ import discord
 from discord.ext import commands
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from time import sleep
 from prettytable import PrettyTable
@@ -19,32 +17,26 @@ class MarketHandler(commands.Cog):
     @commands.command()
     async def 시세요약(self, ctx):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+        #chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920, 1080")
         await ctx.send("working")
-        driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), chrome_options=chrome_options)
+        service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
+        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
         await ctx.send("working - driver")
-        #driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
+
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+        #await ctx.send("working - driver")
 
         # 이 driver.get이 제대로 동작하지 않는것 같음
-        #driver.get("http://www.naver.com")
+        driver.get("http://www.naver.com")
 
-        page_source = None
+        page = driver.page_source
+        await ctx.send("success")
 
-        try:
-            driver.get("http://www.naver.com")
-            driver.implicitly_wait(10)
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="account"]/a')))
-            page_source = driver.page_source
-        except Exception as error:
-            await ctx.send(error)
-
-        await ctx.send("naver " + page_source)
         """
         driver.get('http://lostark.game.onstove.com/Market')
 
@@ -120,7 +112,7 @@ class MarketHandler(commands.Cog):
             output.add_row(index)
 
         await ctx.send(f"```\n{output}\n```")
-        """
+"""
 
 
 def setup(bot):
