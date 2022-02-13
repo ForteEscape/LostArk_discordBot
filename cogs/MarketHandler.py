@@ -42,7 +42,7 @@ class MarketHandler(commands.Cog):
             driver.implicitly_wait(10)
 
             page = driver.page_source
-            await ctx.send(page[10:25])
+            await ctx.send(page[0:500])
 
         except Exception as error:
             await ctx.send(error)
