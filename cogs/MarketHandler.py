@@ -43,17 +43,22 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(driver.current_url)
 
-            try:
-                id_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
-                id_input.send_keys('sehun8631@naver.com')
-            except Exception as error:
-                await ctx.send(error)
+            id_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
+
+            if id_input is None:
+                await ctx.send("this is empty")
+
+            id_input.send_keys('sehun8631@naver.com')
 
             sleep(2)
             pwd_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input')
+
+            if pwd_input is None:
+                await ctx.send("this is empty")
+
             pwd_input.send_keys('kk2924140**')
 
-            await ctx.send(pwd_input.text)
+
             sleep(2)
             driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button').click()
             sleep(2)
