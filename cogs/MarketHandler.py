@@ -27,19 +27,23 @@ class MarketHandler(commands.Cog):
         chrome_options.add_argument("--single-process")
         await ctx.send("working")
 
-        driver = None
-        try:
-            #service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
-            driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), chrome_options=chrome_options)
-            await ctx.send("success")
-        except Exception as error:
-            await ctx.send(error)
+        service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
+        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
 
         await ctx.send("working - driver")
 
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         #await ctx.send("working - driver")
 
+        try:
+            driver.get("naver.com")
+            page = driver.page_source
+
+            await ctx.send(page)
+        except Exception as error:
+            await ctx.send(error)
+
+        """
         driver.get('http://lostark.game.onstove.com/Market')
         page = driver.page_source
 
@@ -121,7 +125,7 @@ class MarketHandler(commands.Cog):
             output.add_row(index)
 
         await ctx.send(f"```\n{output}\n```")
-
+"""
 
 def setup(bot):
     bot.add_cog(MarketHandler(bot))
