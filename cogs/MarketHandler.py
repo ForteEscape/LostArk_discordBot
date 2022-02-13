@@ -41,8 +41,8 @@ class MarketHandler(commands.Cog):
             driver.get('http://lostark.game.onstove.com/Market')
             driver.implicitly_wait(10)
 
-            page = driver.find_element(By.ID, 'idLoginTab')
-            await ctx.send(page.text)
+            page = driver.page_source
+            await ctx.send(page[10:25])
 
         except Exception as error:
             await ctx.send(error)
