@@ -31,18 +31,18 @@ class MarketHandler(commands.Cog):
         #driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-        driver.implicitly_wait(10)
-
         # 이 driver.get이 제대로 동작하지 않는것 같음
         #driver.get("http://www.naver.com")
 
+        page_source = None
+
         try:
             driver.get("http://www.naver.com")
+            driver.implicitly_wait(10)
             element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="account"]/a')))
+            page_source = driver.page_source
         except Exception as error:
             await ctx.send(error)
-
-        page_source = driver.page_source
 
         await ctx.send("naver " + page_source)
         """
