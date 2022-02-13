@@ -43,10 +43,12 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(driver.current_url)
 
-            id_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
-            id_input.send_keys('sehun8631@naver.com')
+            try:
+                id_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
+                id_input.send_keys('sehun8631@naver.com')
+            except Exception as error:
+                await ctx.send(error)
 
-            await ctx.send(id_input.text)
             sleep(2)
             pwd_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input')
             pwd_input.send_keys('kk2924140**')
