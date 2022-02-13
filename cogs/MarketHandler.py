@@ -37,7 +37,7 @@ class MarketHandler(commands.Cog):
         driver.get("http://www.naver.com")
 
         try:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '"//*[@id="account"]/a"')))
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="account"]/a')))
         except Exception as error:
             await ctx.send(error)
 
