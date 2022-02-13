@@ -58,7 +58,9 @@ class MarketHandler(commands.Cog):
             """
 
             page = driver.page_source
-
+            await ctx.send(page[10500:12000])
+            await ctx.send(page[12000:13500])
+            await ctx.send(page[13500:15000])
             await ctx.send(page[15000:16500])
             await ctx.send(page[16500:18000])
             await ctx.send(page[18000:19500])
