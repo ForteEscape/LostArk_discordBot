@@ -3,6 +3,8 @@ import os
 import discord
 from discord.ext import commands
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait as wait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -38,9 +40,13 @@ class MarketHandler(commands.Cog):
             await ctx.send("working - driver.get...")
             driver.get('http://lostark.game.onstove.com/Market')
             sleep(2)
-            page = driver.find_element(By.XPATH, '//*[@id="oneTimeTab"]/a').text
 
-            await ctx.send(page)
+            try:
+                page = wait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="idLoginTab"]/a')))
+                await  ctx.send(page.text)
+            except Exception as error:
+                await ctx.send(error)
+
         except Exception as error:
             await ctx.send(error)
 
