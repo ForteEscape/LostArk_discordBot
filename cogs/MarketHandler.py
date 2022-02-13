@@ -38,7 +38,7 @@ class MarketHandler(commands.Cog):
             await ctx.send("working - driver.get...")
             driver.get('http://lostark.game.onstove.com/Market')
             sleep(2)
-            page = driver.find_element(By.XPATH, '//*[@id="oneTimeTab"]/a')
+            page = driver.find_element(By.XPATH, '//*[@id="oneTimeTab"]/a').text
 
             await ctx.send(page)
         except Exception as error:
