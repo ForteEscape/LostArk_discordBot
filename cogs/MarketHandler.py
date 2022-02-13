@@ -43,14 +43,11 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(driver.current_url)
 
-            driver.find_element(By.NAME, 'user_id').send_keys('sehun8631@naver.com')
-            driver.implicitly_wait(10)
+            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input').send_keys('sehun8631@naver.com')
             sleep(2)
-            driver.find_element(By.NAME, 'user_pwd').send_keys('kk2924140**')
-            driver.implicitly_wait(10)
+            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input').send_keys('kk2924140**')
             sleep(2)
-            driver.find_element(By.CLASS_NAME, 'btn-text').click()
-            driver.implicitly_wait(10)
+            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button').click()
             sleep(2)
 
             driver.implicitly_wait(10)
@@ -60,15 +57,6 @@ class MarketHandler(commands.Cog):
             """
 
             await ctx.send(driver.current_url)
-
-            page = driver.page_source
-            await ctx.send(page[10500:12000])
-            await ctx.send(page[12000:13500])
-            await ctx.send(page[13500:15000])
-            await ctx.send(page[15000:16500])
-            await ctx.send(page[16500:18000])
-            await ctx.send(page[18000:19500])
-            await ctx.send(page[19500:21000])
 
             price_data = driver.find_element(By.ID, 'tbodyItemList').text
             driver.implicitly_wait(10)
