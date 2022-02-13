@@ -36,17 +36,20 @@ class MarketHandler(commands.Cog):
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         #await ctx.send("working - driver")
 
-        driver.get('https://www.naver.com/')
+        driver.get('https://lostark.game.onstove.com/Market')
 
         await ctx.send(driver.current_url)
 
         driver.implicitly_wait(5)
 
-        search_form = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[3]/form/fieldset/div/input')
-        search_form.send_keys("나무위키")
+        user_id = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
+        user_id.send_keys(os.environ.get('USER_ID'))
 
-        search_btn = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div[1]/div/div[3]/form/fieldset/button')
-        search_btn.click()
+        user_pwd = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input')
+        user_pwd.send_keys(os.environ.get('USER_PWD'))
+
+        log_in_btn = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button')
+        log_in_btn.click()
 
         await ctx.send(driver.current_url)
 
