@@ -51,12 +51,14 @@ class MarketHandler(commands.Cog):
             driver.implicitly_wait(10)
             sleep(2)
 
+            driver.implicitly_wait(10)
             driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[2]/a[2]').click()
             driver.implicitly_wait(10)
             price_data = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
             driver.implicitly_wait(10)
             sleep(2)
 
+            driver.implicitly_wait(10)
             driver.find_element(By.XPATH, '//*[@id="marketList"]/div[2]/a[3]').click()
             driver.implicitly_wait(10)
             sleep(1)
