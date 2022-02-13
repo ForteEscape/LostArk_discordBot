@@ -48,6 +48,7 @@ class MarketHandler(commands.Cog):
             if id_input is None:
                 await ctx.send("this is empty")
 
+            await ctx.send(id_input)
             id_input.send_keys('sehun8631@naver.com')
 
             sleep(2)
@@ -56,6 +57,7 @@ class MarketHandler(commands.Cog):
             if pwd_input is None:
                 await ctx.send("this is empty")
 
+            await ctx.send(pwd_input)
             pwd_input.send_keys('kk2924140**')
 
 
