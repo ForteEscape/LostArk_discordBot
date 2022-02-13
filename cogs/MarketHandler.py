@@ -34,9 +34,10 @@ class MarketHandler(commands.Cog):
         driver.implicitly_wait(10)
 
         # 이 driver.get이 제대로 동작하지 않는것 같음
-        driver.get("http://www.naver.com")
+        #driver.get("http://www.naver.com")
 
         try:
+            driver.get("http://www.naver.com")
             element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="account"]/a')))
         except Exception as error:
             await ctx.send(error)
