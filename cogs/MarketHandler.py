@@ -39,7 +39,7 @@ class MarketHandler(commands.Cog):
         try:
             await ctx.send("working - driver.get...")
             driver.get('https://lostark.game.onstove.com/Market/BookMark')
-            driver.implicitly_wait(10)
+            driver.implicitly_wait(5)
 
             await ctx.send(driver.current_url)
 
@@ -62,7 +62,11 @@ class MarketHandler(commands.Cog):
 
 
             sleep(2)
-            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button').click()
+            login_btn = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button')
+
+            await ctx.send(login_btn)
+
+            login_btn.click()
             sleep(2)
 
             driver.implicitly_wait(10)
@@ -73,6 +77,7 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(driver.current_url)
 
+            """
             price_data = driver.find_element(By.ID, 'tbodyItemList').text
             driver.implicitly_wait(10)
             sleep(2)
@@ -133,6 +138,7 @@ class MarketHandler(commands.Cog):
                 output.add_row(index)
 
             await ctx.send(f"```\n{output}\n```")
+            """
 
         except Exception as error:
             await ctx.send(error)
