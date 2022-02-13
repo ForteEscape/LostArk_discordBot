@@ -27,8 +27,8 @@ class MarketHandler(commands.Cog):
 
         driver = None
         try:
-            service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
-            driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+            #service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
+            driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), chrome_options=chrome_options)
         except Exception as error:
             await ctx.send(error)
 
