@@ -56,6 +56,14 @@ class MarketHandler(commands.Cog):
             driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[2]/a[2]').click()
             driver.implicitly_wait(10)
             """
+
+            page = driver.page_source
+
+            await ctx.send(page[15000:16500])
+            await ctx.send(page[16500:18000])
+            await ctx.send(page[18000:19500])
+            await ctx.send(page[19500:21000])
+
             price_data = driver.find_element(By.ID, 'tbodyItemList').text
             driver.implicitly_wait(10)
             sleep(2)
