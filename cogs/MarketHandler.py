@@ -24,8 +24,14 @@ class MarketHandler(commands.Cog):
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920, 1080")
         await ctx.send("working")
-        service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
-        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+
+        driver = None
+        try:
+            service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
+            driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+        except Exception as error:
+            await ctx.send(error)
+
         await ctx.send("working - driver")
 
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
