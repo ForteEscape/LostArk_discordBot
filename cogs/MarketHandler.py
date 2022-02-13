@@ -43,11 +43,15 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(driver.current_url)
 
-            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input').click()
-            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input').send_keys('sehun8631@naver.com')
+            id_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
+            id_input.send_keys('sehun8631@naver.com')
+
+            await ctx.send(id_input.text)
             sleep(2)
-            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input').click()
-            driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input').send_keys('kk2924140**')
+            pwd_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input')
+            pwd_input.send_keys('kk2924140**')
+
+            await ctx.send(pwd_input.text)
             sleep(2)
             driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button').click()
             sleep(2)
