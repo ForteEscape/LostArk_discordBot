@@ -24,11 +24,10 @@ class MarketHandler(commands.Cog):
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920, 1080")
         chrome_options.add_argument("--remote-debugging-port=9222")
-        chrome_options.add_argument("--single-process")
         await ctx.send("working")
 
-        service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
-        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+        #service = Service(executable_path=os.environ.get('CHROMEDRIVER_PATH'))
+        driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), chrome_options=chrome_options)
 
         await ctx.send("working - driver")
 
@@ -36,6 +35,7 @@ class MarketHandler(commands.Cog):
         #await ctx.send("working - driver")
 
         try:
+            await ctx.send("working - driver.get...")
             driver.get("naver.com")
             page = driver.page_source
 
