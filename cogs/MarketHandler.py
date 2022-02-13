@@ -38,7 +38,7 @@ class MarketHandler(commands.Cog):
 
         try:
             await ctx.send("working - driver.get...")
-            driver.get('http://lostark.game.onstove.com/Market')
+            driver.get('https://lostark.game.onstove.com/Market/BookMark')
             driver.implicitly_wait(10)
 
             driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('sehun8631@naver.com')
@@ -52,13 +52,10 @@ class MarketHandler(commands.Cog):
             sleep(2)
 
             driver.implicitly_wait(10)
-
-            page = driver.page_source
-
-            await ctx.send(page[7500:9000])
-
+            """
             driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[2]/a[2]').click()
             driver.implicitly_wait(10)
+            """
             price_data = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
             driver.implicitly_wait(10)
             sleep(2)
@@ -67,6 +64,7 @@ class MarketHandler(commands.Cog):
             driver.find_element(By.XPATH, '//*[@id="marketList"]/div[2]/a[3]').click()
             driver.implicitly_wait(10)
             sleep(1)
+
             price_data2 = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
 
             data_price = price_data + '\n' + price_data2
