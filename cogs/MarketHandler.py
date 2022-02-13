@@ -42,10 +42,10 @@ class MarketHandler(commands.Cog):
             sleep(2)
 
             try:
-                page = wait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="idLoginTab"]/a')))
-                await  ctx.send(page.text)
-            except Exception as error:
-                await ctx.send(error)
+                page = wait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="idLoginTab"]/a')))
+                await ctx.send(page.text)
+            finally:
+                driver.quit()
 
         except Exception as error:
             await ctx.send(error)
