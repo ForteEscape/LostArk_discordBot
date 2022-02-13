@@ -54,8 +54,8 @@ class MarketHandler(commands.Cog):
             driver.implicitly_wait(10)
 
             page = driver.page_source
-            await ctx.send(page[0:1500])
-            await ctx.send(page[1500:3000])
+
+            await ctx.send(page[7500:9000])
 
             driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[2]/a[2]').click()
             driver.implicitly_wait(10)
