@@ -51,9 +51,6 @@ class MarketHandler(commands.Cog):
             driver.implicitly_wait(10)
             sleep(2)
 
-            page = driver.page_source
-            await ctx.send(page + " loading success")
-
             driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[2]/a[2]').click()
             driver.implicitly_wait(10)
             price_data = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
@@ -64,9 +61,6 @@ class MarketHandler(commands.Cog):
             driver.implicitly_wait(10)
             sleep(1)
             price_data2 = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
-
-            page = driver.page_source
-            await ctx.send(page + " loading success")
 
             data_price = price_data + '\n' + price_data2
             data_price_list = data_price.split('\n')
