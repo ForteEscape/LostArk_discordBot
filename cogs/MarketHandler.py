@@ -55,6 +55,12 @@ class MarketHandler(commands.Cog):
 
         driver.implicitly_wait(5)
 
+        alert_log = driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[3]/div/div")
+        if alert_log.text is None:
+            pass
+        else:
+            await ctx.send(alert_log.text)
+
         await ctx.send(driver.current_url)
 
         """
