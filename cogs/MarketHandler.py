@@ -39,9 +39,9 @@ class MarketHandler(commands.Cog):
         try:
             await ctx.send("working - driver.get...")
             driver.get('http://lostark.game.onstove.com/Market')
-            sleep(2)
+            driver.implicitly_wait(10)
 
-            page = wait(driver, 5).until(EC.presence_of_element_located((By.ID, 'idLoginTab')))
+            page = driver.find_element(By.ID, 'idLoginTab')
             await ctx.send(page.text)
 
         except Exception as error:
