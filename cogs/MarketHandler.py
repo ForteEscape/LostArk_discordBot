@@ -41,11 +41,8 @@ class MarketHandler(commands.Cog):
             driver.get('http://lostark.game.onstove.com/Market')
             sleep(2)
 
-            try:
-                page = wait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="idLoginTab"]/a')))
-                await ctx.send(page.text)
-            finally:
-                driver.quit()
+            page = wait(driver, 5).until(EC.presence_of_element_located((By.ID, 'idLoginTab')))
+            await ctx.send(page.text)
 
         except Exception as error:
             await ctx.send(error)
