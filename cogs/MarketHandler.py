@@ -40,13 +40,6 @@ class MarketHandler(commands.Cog):
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         #await ctx.send("working - driver")
 
-        # 이 driver.get이 제대로 동작하지 않는것 같음
-        driver.get("http://www.naver.com")
-
-        page = driver.page_source
-        await ctx.send("success")
-
-        """
         driver.get('http://lostark.game.onstove.com/Market')
 
         driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('sehun8631@naver.com')
@@ -121,7 +114,6 @@ class MarketHandler(commands.Cog):
             output.add_row(index)
 
         await ctx.send(f"```\n{output}\n```")
-"""
 
 
 def setup(bot):
