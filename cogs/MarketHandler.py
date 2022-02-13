@@ -4,7 +4,9 @@ import discord
 from discord.ext import commands
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from time import sleep
 from prettytable import PrettyTable
@@ -29,8 +31,16 @@ class MarketHandler(commands.Cog):
         #driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), options=chrome_options)
         #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
+        driver.implicitly_wait(10)
+
         # 이 driver.get이 제대로 동작하지 않는것 같음
         driver.get("http://www.naver.com")
+
+        try:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '"//*[@id="account"]/a"')))
+        except Exception as error:
+            await ctx.send(error)
+
         page_source = driver.page_source
 
         await ctx.send("naver " + page_source)
