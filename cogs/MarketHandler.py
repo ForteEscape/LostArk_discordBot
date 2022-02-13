@@ -49,7 +49,7 @@ class MarketHandler(commands.Cog):
                 await ctx.send("this is empty")
 
             await ctx.send(id_input)
-            id_input.send_keys('sehun8631@naver.com')
+            id_input.send_keys(os.environ.get('USER_ID'))
 
             sleep(2)
             pwd_input = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input')
@@ -58,7 +58,7 @@ class MarketHandler(commands.Cog):
                 await ctx.send("this is empty")
 
             await ctx.send(pwd_input)
-            pwd_input.send_keys('kk2924140**')
+            pwd_input.send_keys(os.environ.get('USER_PWD'))
 
 
             sleep(2)
