@@ -43,13 +43,17 @@ class MarketHandler(commands.Cog):
         driver.implicitly_wait(5)
 
         user_id = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[1]/input')
+        user_id.click()
         user_id.send_keys("sehun8631@naver.com")
 
         user_pwd = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[1]/div[2]/input')
+        user_pwd.click()
         user_pwd.send_keys("kk2924140**")
 
         log_in_btn = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/fieldset[1]/div[4]/button')
         log_in_btn.click()
+
+        driver.implicitly_wait(5)
 
         await ctx.send(driver.current_url)
 
