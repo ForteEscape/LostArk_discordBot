@@ -107,5 +107,5 @@ fabric.properties
 # CodeStream plugin
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
-
+putty_key/
 # End of https://www.toptal.com/developers/gitignore/api/pycharm
