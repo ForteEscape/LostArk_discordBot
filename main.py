@@ -9,7 +9,7 @@ extensionUnit = ['cogs.CalenderHandler', 'cogs.CommonContentHandler',
                  'cogs.BotEventHandler', 'cogs.PlayerContentHandler',
                  'cogs.CollectionPointsHandler', 'cogs.BossRaidContentHandler',
                  'cogs.CommandInfoHandler', 'cogs.BotUpdateLogHandler',
-                 'cogs.GuideContentHandler', 'cogs.MarketHandler']
+                 'cogs.GuideContentHandler', 'cogs.MarketHandler', 'cogs.EmojiHandler']
 
 if __name__ == '__main__':
     for unit in extensionUnit:
