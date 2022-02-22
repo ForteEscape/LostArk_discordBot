@@ -17,8 +17,8 @@ class CommandInfoHandler(commands.Cog):
                         inline=False)
 
         embed.add_field(name="  !모험의서 [대륙 이름]",
-                        value=" 각 대륙의 모험의 서 요소에 대하여 정보를 알려줍니다. 이때 베른 북부, 루테란 동부 등의 띄어쓰기는 모두 붙여서 씁니다.\n"
-                              "ex) !모험의서 루테란서부\n",
+                        value=" 각 대륙의 모험의 서 요소에 대하여 정보를 알려줍니다.\n"
+                              "ex) !모험의서 루테란 서부\n",
                         inline=False)
 
         embed.add_field(name="!군단장 [발탄, 비아키스, 쿠크세이튼, 아브렐슈드, 일리아칸, 카멘]",
@@ -49,11 +49,6 @@ class CommandInfoHandler(commands.Cog):
         embed.add_field(name="!가이드 [육성, 아이템, 각인, 골드]",
                         value="게임 시스템 및 여러가지 가이드 정보 링크를 호출합니다.\n"
                               "ex) !가이드 각인",
-                        inline=False)
-
-        embed.add_field(name="!log",
-                        value="해당 디스코드 봇의 업데이트 내역을 호출합니다.\n"
-                              "ex) !log",
                         inline=False)
 
         embed.set_footer(text="건의사항 추가사항 받기 가능 그러나 반영 매우 늦음."
