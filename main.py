@@ -1,9 +1,14 @@
 import discord
 import os
 import asyncio
+import pandas as pd
 from discord.ext import commands
 
 client = commands.Bot(command_prefix='!')
+path = "data/token.txt"
+token_df = pd.read_csv(path)
+token = 0
+bot_execute_flag = True
 
 extensionUnit = ['cogs.CalenderHandler', 'cogs.CommonContentHandler',
                  'cogs.BotEventHandler', 'cogs.PlayerContentHandler',
@@ -16,4 +21,11 @@ if __name__ == '__main__':
         client.load_extension(unit)
         print(unit + "load successful")
 
-client.run('token')
+    if not bot_execute_flag:
+        token = token_df.loc[token_df['Bot'] == 'LOA_BOT_BETA', 'Token'][0]
+    else:
+        token = token_df.loc[token_df['Bot'] == 'LOA_BOT', 'Token'][1]
+
+    print(token)
+
+client.run('ODYzMDYwNDExNDE0MjE2NzI0.GoBTTN.hb9DiC4AKjs85t_2j0odwLNbtSbn7wAYBbrtZo')

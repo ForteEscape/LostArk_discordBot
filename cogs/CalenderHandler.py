@@ -28,20 +28,28 @@ class CalenderHandler(commands.Cog):
         chk_time = datetime.datetime.now(timezone('Asia/Seoul'))
 
         if chk_time.hour == 6 and chk_time.minute == 5 and chk_time.second == 0:
-            self.__data_preprocess_for_event()
+            try:
+                self.__data_preprocess_for_event()
+            except Exception as error:
+                print(error)
+                return
 
         if (chk_time.minute == 32 and chk_time.now().second == 0) or (chk_time.minute == 2 and chk_time.second == 0):
-            is_change = self.__get_data_from_notice()
+            try:
+                is_change = self.__get_data_from_notice()
 
-            if is_change is None:
+                if is_change is None:
+                    return
+                elif is_change is True:
+                    channel = self.bot.get_channel(945592198165069834)
+
+                    embed = discord.Embed(title=self.previous_notice_maintenance)
+                    embed.add_field(name="내용", value=self.notice_maintenance_article)
+
+                    await channel.send(embed=embed)
+            except Exception as error:
+                print(error)
                 return
-            elif is_change is True:
-                channel = self.bot.get_channel(945592198165069834)
-
-                embed = discord.Embed(title=self.previous_notice_maintenance)
-                embed.add_field(name="내용", value=self.notice_maintenance_article)
-
-                await channel.send(embed=embed)
 
     @commands.command()
     # 셀레니움을 이용한 크롤링 후 데이터 가공, 사용자에게 제공으로 변경(특정 채널에 출력되도록 수정)
@@ -77,19 +85,19 @@ class CalenderHandler(commands.Cog):
 
     def __get_driver(self):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--window-size=1920, 1080")
-        chrome_options.add_argument("--remote-debugging-port=9222")
+        #chrome_options.add_argument("--headless")
+        #chrome_options.add_argument("--disable-dev-shm-usage")
+        #chrome_options.add_argument("--no-sandbox")
+        #chrome_options.add_argument("--disable-gpu")
+        #chrome_options.add_argument("--window-size=1920, 1080")
+        #chrome_options.add_argument("--remote-debugging-port=9222")
 
         # live service
-        driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
+        # driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
 
         # ====================== testing service ==================================
-        # service = Service(ChromeDriverManager().install())
-        # driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
         # ====================== testing service end ==============================
 
         return driver
@@ -106,6 +114,7 @@ class CalenderHandler(commands.Cog):
             driver.get(notice_path)
 
             if driver.current_url != notice_path:
+                driver.quit()
                 return
 
             sleep(1)
@@ -120,12 +129,15 @@ class CalenderHandler(commands.Cog):
             notice_article_data = driver.find_element(By.CSS_SELECTOR, article_path)
             self.notice_maintenance_article = notice_article_data.text
 
+            driver.quit()
+
             return True
         else:
             driver = self.__get_driver()
             driver.get(notice_path)
 
             if driver.current_url != notice_path:
+                driver.quit()
                 return None
 
             notice_data = driver.find_elements(By.CSS_SELECTOR, notice_list_path)
@@ -138,7 +150,12 @@ class CalenderHandler(commands.Cog):
                 self.notice_maintenance_article = notice_article_data.text
                 self.previous_notice_maintenance = self.current_notice_maintenance
 
+                driver.quit()
+
                 return True
+
+            driver.quit()
+            return False
 
     def __get_data_from_event(self, driver):
         elements = driver.find_elements(By.CSS_SELECTOR,
@@ -151,6 +168,8 @@ class CalenderHandler(commands.Cog):
             self.event_duration_list.append(index.find_element(By.CSS_SELECTOR, 'a > div.list__term').text)
             self.event_link_list.append(index.find_element(By.CSS_SELECTOR, 'a').get_attribute('href'))
 
+        driver.quit()
+
     def __data_preprocess_for_event(self):
         self.event_thumbnail_list = []
         self.event_subject_list = []
@@ -161,6 +180,7 @@ class CalenderHandler(commands.Cog):
         driver.get(event_path)
 
         if driver.current_url != event_path:
+            driver.quit()
             return
 
         sleep(1)
@@ -171,6 +191,8 @@ class CalenderHandler(commands.Cog):
             index.click()
             sleep(1)
             self.__get_data_from_event(driver=driver)
+
+        driver.quit()
 
 
 def setup(bot):

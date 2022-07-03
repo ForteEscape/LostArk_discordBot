@@ -43,14 +43,18 @@ class MarketHandler(commands.Cog):
         chk_time = datetime.datetime.now(timezone('Asia/Seoul'))
 
         if (chk_time.minute == 20 and chk_time.second == 0) or (chk_time.minute == 50 and chk_time.second == 0):
-            data_price_list = self.__get_data_from_bookmark()
+            try:
+                data_price_list = self.__get_data_from_bookmark()
 
-            if data_price_list is None:
+                if data_price_list is None:
+                    return
+
+                print(self.update_time)
+
+                self.price_data_list = self.__data_processing(data_price_list)
+            except Exception as error:
+                print(error)
                 return
-
-            print(self.update_time)
-
-            self.price_data_list = self.__data_processing(data_price_list)
 
     @commands.command()
     async def 시세요약(self, ctx):
@@ -129,6 +133,135 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(f"```\n{output}\n```")
 
+    @commands.command()
+    async def 경매(self, ctx, character_class=None, parts=None, status1=None, status2=None, engrave1=None,
+                 engrave_val1=None, engrave2=None, engrave2_val=None, price=None):
+
+        if character_class is None:
+            embed = discord.Embed(title="!경매 명령어 설명",
+                                  description="!경매 명령어에 대하여 설명합니다.")
+            embed.add_field(name="!경매 [직업 악세부위 전투특성 전투특성2 각인 각인수치 각인2 각인2수치 품질 가격]",
+                            value="입력받은 조건에 부합한 악세를 찾습니다. 이때 전투특성이나 각인을 임의로 하고 싶을 경우 무조건 없음"
+                                  "으로 입력해 주세요\n"
+                                  "\nex) !경매 워로드 귀걸이 특화 없음 전투태세 5 원한 3 80 27000\n"
+                                  "\nex) !경매 도화가 목걸이 신속 특화 만개 6 없음 없음 80 30000")
+            await ctx.send(embed=embed)
+        else:
+            try:
+                auction_path = 'https://lostark.game.onstove.com/Auction'
+
+                driver = self.__get_driver()
+                driver.get(auction_path)
+
+                is_success = self.__log_in_process(driver)
+
+                if not is_success:
+                    driver.quit()
+                    return None
+
+                sleep(2)
+
+                driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[2]/form/fieldset/div/div[5]/button[2]').click()
+                sleep(2)
+
+                driver.find_element(By.CSS_SELECTOR, '#selClassDetail > div.lui-select__title').click()
+                sleep(1)
+                elements = driver.find_elements(By.CSS_SELECTOR, '#selClassDetail > div.lui-select__option > label')
+                sleep(2)
+
+                for index in elements:
+                    if index.text == character_class:
+                        index.click()
+
+                if parts == '목걸이':
+                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[1]').click()
+                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[2]/label[11]').click()
+                elif parts == '귀걸이':
+                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[1]').click()
+                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[2]/label[12]').click()
+                elif parts == '반지':
+                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[1]').click()
+                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[2]/label[13]').click()
+
+                driver.find_element(By.XPATH,
+                                    '//*[@id="modal-deal-option"]/div/div/div[1]/div[1]/table/tbody/tr[4]/td[2]/div/div[1]').click()
+                sleep(1)
+
+                driver.find_element(By.XPATH,
+                                    '//*[@id="modal-deal-option"]/div/div/div[1]/div[1]/table/tbody/tr[4]/td[2]/div/div[2]/label[7]').click()
+
+                driver.find_element(By.CSS_SELECTOR, '#selEtc_0 > div.lui-select__title').click()
+                driver.find_element(By.CSS_SELECTOR,
+                                    '#selEtc_0 > div.lui-select__option > label:nth-child(2)').click()
+                sleep(1)
+
+                driver.find_element(By.CSS_SELECTOR, '#selEtcSub_0 > div.lui-select__title').click()
+                elements = driver.find_elements(By.CSS_SELECTOR, '#selEtcSub_0 > div.lui-select__option > label')
+
+                for index in elements:
+                    if index.text == status1:
+                        index.click()
+                sleep(1)
+
+                if status2 != "없음":
+                    driver.find_element(By.CSS_SELECTOR, '#selEtc_1 > div.lui-select__title').click()
+                    driver.find_element(By.CSS_SELECTOR,
+                                        '#selEtc_1 > div.lui-select__option > label:nth-child(2)').click()
+                    sleep(1)
+
+                    driver.find_element(By.CSS_SELECTOR, '#selEtcSub_1 > div.lui-select__title').click()
+                    elements = driver.find_elements(By.CSS_SELECTOR,
+                                                    '#selEtcSub_1 > div.lui-select__option > label')
+
+                    for index in elements:
+                        if index.text == status2:
+                            index.click()
+                    sleep(1)
+
+                driver.find_element(By.CSS_SELECTOR, '#selEtc_2 > div.lui-select__title').click()
+                driver.find_element(By.CSS_SELECTOR, '#selEtc_2 > div.lui-select__option > label:nth-child(3)').click()
+
+                sleep(1)
+                driver.find_element(By.CSS_SELECTOR, '#selEtcSub_2 > div.lui-select__title').click()
+                elements = driver.find_elements(By.CSS_SELECTOR, '#selEtcSub_2 > div.lui-select__option > label')
+
+                sleep(1)
+                for index in elements:
+                    if index.text == engrave1:
+                        index.click()
+
+                driver.find_element(By.CSS_SELECTOR, '#txtEtcMin_2').send_keys(engrave_val1)
+                sleep(2)
+
+                if engrave2 != "없음":
+                    driver.find_element(By.CSS_SELECTOR, '#selEtc_3 > div.lui-select__title').click()
+                    driver.find_element(By.CSS_SELECTOR,
+                                        '#selEtc_3 > div.lui-select__option > label:nth-child(3)').click()
+
+                    sleep(1)
+                    driver.find_element(By.CSS_SELECTOR, '#selEtcSub_3 > div.lui-select__title').click()
+                    elements = driver.find_elements(By.CSS_SELECTOR,
+                                                    '#selEtcSub_3 > div.lui-select__option > label')
+
+                    sleep(1)
+                    for index in elements:
+                        if index.text == engrave2:
+                            index.click()
+
+                    sleep(1)
+                    driver.find_element(By.CSS_SELECTOR, '#txtEtcMin_3').send_keys(engrave2_val)
+
+                sleep(5)
+                driver.find_element(By.CSS_SELECTOR,
+                                    '#modal-deal-option > div > div > div.lui-modal__button > button.lui-modal__search').click()
+                sleep(30)
+
+
+            except Exception as error:
+                return
+
+
+
     # 데이터테이블 만드는 내부 메서드
     def __make_table(self, data_list):
         output = PrettyTable()
@@ -147,6 +280,7 @@ class MarketHandler(commands.Cog):
         is_success = self.__log_in_process(driver)
 
         if not is_success:
+            driver.quit()
             return None
 
         sleep(2)
@@ -162,6 +296,7 @@ class MarketHandler(commands.Cog):
         data_price_list = data_price.split('\n')
 
         driver.quit()
+
         self.update_time = datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
 
         return data_price_list
@@ -174,6 +309,7 @@ class MarketHandler(commands.Cog):
         is_success = self.__log_in_process(driver)
 
         if not is_success:
+            driver.quit()
             return None
 
         sleep(2)
@@ -225,33 +361,35 @@ class MarketHandler(commands.Cog):
     # 데이터 크롤링 준비 메서드
     def __log_in_process(self, driver):
         try:
-            driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('id')
+            driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('sehun8631@naver.com')
             sleep(2)
-            driver.find_element(By.XPATH, '//*[@id="user_pwd"]').send_keys('pwd')
+            driver.find_element(By.XPATH, '//*[@id="user_pwd"]').send_keys('kk2924140**')
             sleep(2)
             driver.find_element(By.XPATH, '//*[@id="idLogin"]/div[4]/button/span').click()
 
             return True
 
         except Exception as error:
+            print("log in failed cause this error")
+            print(error)
             return False
 
     # 데이터 크롤링 준비 메서드2
     def __get_driver(self):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--window-size=1920, 1080")
-        chrome_options.add_argument("--remote-debugging-port=9222")
+        #chrome_options.add_argument("--headless")
+        #chrome_options.add_argument("--disable-dev-shm-usage")
+        #chrome_options.add_argument("--no-sandbox")
+        #chrome_options.add_argument("--disable-gpu")
+        #chrome_options.add_argument("--window-size=1920, 1080")
+        #chrome_options.add_argument("--remote-debugging-port=9222")
 
         # live service
-        driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
+        # driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
 
         # ====================== testing service ==================================
-        # service = Service(ChromeDriverManager().install())
-        # driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
         # ====================== testing service end ==============================
 
         return driver
