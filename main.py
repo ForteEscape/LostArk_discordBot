@@ -8,7 +8,7 @@ client = commands.Bot(command_prefix='!')
 path = "data/token.txt"
 token_df = pd.read_csv(path)
 token = 0
-bot_execute_flag = True
+bot_execute_flag = False
 
 extensionUnit = ['cogs.CalenderHandler', 'cogs.CommonContentHandler',
                  'cogs.BotEventHandler', 'cogs.PlayerContentHandler',
@@ -26,6 +26,4 @@ if __name__ == '__main__':
     else:
         token = token_df.loc[token_df['Bot'] == 'LOA_BOT', 'Token'][1]
 
-    print(token)
-
-client.run('ODYzMDYwNDExNDE0MjE2NzI0.GoBTTN.hb9DiC4AKjs85t_2j0odwLNbtSbn7wAYBbrtZo')
+client.run(token)
