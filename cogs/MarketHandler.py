@@ -1,5 +1,5 @@
 import discord
-import datetime
+import datetime, csv, math, string
 from pytz import timezone
 from discord.ext import commands, tasks
 from selenium import webdriver
@@ -18,22 +18,8 @@ class MarketHandler(commands.Cog):
         self.price_data_list = []
         self.update_time = None
         self.get_price_data.start()
-        self.item_nickname_list = [
-            ['파결석', '파괴석 결정'],
-            ['중레하', '중급 오레하 융화 재료'],
-            ['하레하', '하급 오레하 융화 재료'],
-            ['명돌', '명예의 돌파석'],
-            ['위명돌', '위대한 명예의 돌파석'],
-            ['상레하', '상급 오레하 융화 재료'],
-            ['경명돌', '경이로운 명예의 돌파석'],
-            ['은총', '태양의 은총'],
-            ['파강석', '파괴강석'],
-            ['축복', '태양의 축복'],
-            ['명파(소)', '명예의 파편 주머니(소)'],
-            ['가호', '태양의 가호'],
-            ['명파(중)', '명예의 파편 주머니(중)'],
-            ['명파(대)', '명예의 파편 주머니(대)'],
-        ]
+        self.is_alamed = False
+        self.item_nickname_list = self.__get_nickname()
 
     @tasks.loop(seconds=1)
     async def get_price_data(self):
@@ -42,19 +28,125 @@ class MarketHandler(commands.Cog):
         """
         chk_time = datetime.datetime.now(timezone('Asia/Seoul'))
 
-        if (chk_time.minute == 20 and chk_time.second == 0) or (chk_time.minute == 50 and chk_time.second == 0):
+        if (chk_time.minute == 21 and chk_time.second == 0) or (chk_time.minute == 51 and chk_time.second == 0):
             try:
-                data_price_list = self.__get_data_from_bookmark()
+                data_price_list = self.__get_data_from_csv()
 
                 if data_price_list is None:
                     return
 
-                print(self.update_time)
+                print("load success")
+                load_time = datetime.datetime.now(timezone('Asia/Seoul'))
 
-                self.price_data_list = self.__data_processing(data_price_list)
+                '''
+                announcement function
+                if not self.is_alamed:
+                    self.is_alamed = True
+
+                    embed = discord.Embed(title="점검 알림")
+                    embed.add_field(name="점검 내용",
+                                    value="점검 시간: 11:20 ~ 별도 안내 까지\n"
+                                          "점검 동안 봇 서비스가 간헐적으로 중단되거나 전면 중단될 수 있습니다.\n")
+                    channel = self.bot.get_channel(id)
+                    await channel.send(embed=embed)
+                '''
+
+                self.price_data_list = data_price_list
+                self.update_time = load_time
+
             except Exception as error:
                 print(error)
                 return
+
+    @commands.command()
+    async def 경매(self, ctx, *condition):
+        data = ' '.join(condition)
+
+        if data == '':
+            embed = discord.Embed(title="!경매 명령어 설명",
+                                  description="!경매 명령어에 대하여 설명합니다.")
+            embed.add_field(name="!경매 [파티 인원] [아이템 이름]",
+                            value="경매 가격에 대한 입찰가를 출력합니다\n")
+            await ctx.send(embed=embed)
+        else:
+            party = data.split(' ')[0]
+            gold_data = data.split(' ')[1]
+            orig_data = gold_data
+
+            is_data_digit = True
+
+            # gold_data가 각인서 또는 강화 확률 추가 아이템 이름으로 나올 경우
+            if not gold_data.isdecimal():
+                is_data_digit = False
+                is_item_in_list = False
+
+                # 만약 nickname list에서 해당 품목을 찾는다면, 해당 이름(nickname)으로 변환
+                for item in self.item_nickname_list:
+                    if gold_data in item:
+                        gold_data = item[0]
+                        is_item_in_list = True
+
+                # 이후 검색
+                if is_item_in_list:
+                    for item in self.price_data_list:
+                        if item[0] == gold_data:
+                            if '\"' in item[3]:
+                                item[3] = item[3].strip('\"')
+                            if ',' in item[3]:
+                                item[3] = item[3].replace(",", "")
+
+                            price_data = int(item[3])
+                            gold_data = price_data
+                            break
+                else:
+                    await ctx.send("요청하신 " + gold_data + " 의 가격을 찾지 못했습니다. 숫자로 입력하시거나 정확한 데이터를 넣어주세요")
+                    return
+            else:
+                # 아니라면, text-format 형식을 int로 변환
+                gold_data = int(gold_data)
+                
+            # 경매가 계산 및 디스코드 출력
+            if party == '4' or party == '4인':
+                bid_gold, bid_before_gold = self.__calculate_bidgold(4, gold_data)
+                embed = discord.Embed(title="경매가 결과")
+
+                if not is_data_digit:
+                    embed.add_field(name=orig_data + " 에 대한 4인 입찰 가격",
+                                    value="4인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(bid_gold) + "골드 까지입니다.\n")
+                else:
+                    embed.add_field(name=str(gold_data) + "골드 에 대한 4인 입찰 가격",
+                                    value="4인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(
+                                        bid_gold) + "골드 까지입니다.\n")
+                await ctx.send(embed=embed)
+            elif party == '8' or party == '8인':
+                bid_gold, bid_before_gold = self.__calculate_bidgold(8, gold_data)
+                embed = discord.Embed(title="경매가 결과")
+
+                if not is_data_digit:
+                    embed.add_field(name=orig_data + " 에 대한 8인 입찰 가격",
+                                    value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(
+                                        bid_gold) + "골드 까지입니다.\n")
+                else:
+                    embed.add_field(name=str(gold_data) + "골드 에 대한 8인 입찰 가격",
+                                    value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(
+                                        bid_gold) + "골드 까지입니다.\n")
+                await ctx.send(embed=embed)
+
+    def __calculate_bidgold(self, party_type, gold_data):
+        bid_gold, bid_before_gold = 0, 0
+
+        if party_type == 4:
+            bid_gold = gold_data * 0.95 * 0.75
+            bid_before_gold = gold_data * 0.95 * 0.68
+            bid_gold = math.floor(bid_gold)
+            bid_before_gold = math.floor(bid_before_gold)
+        elif party_type == 8:
+            bid_gold = gold_data * 0.95 * 0.875
+            bid_before_gold = gold_data * 0.95 * 0.795
+            bid_gold = math.floor(bid_gold)
+            bid_before_gold = math.floor(bid_before_gold)
+
+        return bid_gold, bid_before_gold
 
     @commands.command()
     async def 시세요약(self, ctx):
@@ -62,15 +154,14 @@ class MarketHandler(commands.Cog):
         클래스 필드의 price_data_list에 값이 없을 시 위에 했던 데이터 크롤링을 실시한다.
         만약 존재할 시 해당 값을 바로 출력함으로서 로그인 - 데이터 크롤링 과정을 모두 생략하여 속도를 높인다.
         """
-
         if not self.price_data_list:
-            data_price_list = self.__get_data_from_bookmark()
+            data_price_list = self.__get_data_from_csv()
 
             if data_price_list is None:
                 await ctx.send("거래소에 접속할 수 없습니다. 점검중이거나 서버 문제일 수 있습니다.")
                 return
 
-            self.price_data_list = self.__data_processing(data_price_list)
+            self.price_data_list = data_price_list
 
         output = self.__make_table(self.price_data_list)
         await ctx.send(f"```\n{output}\n```")
@@ -133,136 +224,7 @@ class MarketHandler(commands.Cog):
 
             await ctx.send(f"```\n{output}\n```")
 
-    @commands.command()
-    async def 경매(self, ctx, character_class=None, parts=None, status1=None, status2=None, engrave1=None,
-                 engrave_val1=None, engrave2=None, engrave2_val=None, price=None):
-
-        if character_class is None:
-            embed = discord.Embed(title="!경매 명령어 설명",
-                                  description="!경매 명령어에 대하여 설명합니다.")
-            embed.add_field(name="!경매 [직업 악세부위 전투특성 전투특성2 각인 각인수치 각인2 각인2수치 품질 가격]",
-                            value="입력받은 조건에 부합한 악세를 찾습니다. 이때 전투특성이나 각인을 임의로 하고 싶을 경우 무조건 없음"
-                                  "으로 입력해 주세요\n"
-                                  "\nex) !경매 워로드 귀걸이 특화 없음 전투태세 5 원한 3 80 27000\n"
-                                  "\nex) !경매 도화가 목걸이 신속 특화 만개 6 없음 없음 80 30000")
-            await ctx.send(embed=embed)
-        else:
-            try:
-                auction_path = 'https://lostark.game.onstove.com/Auction'
-
-                driver = self.__get_driver()
-                driver.get(auction_path)
-
-                is_success = self.__log_in_process(driver)
-
-                if not is_success:
-                    driver.quit()
-                    return None
-
-                sleep(2)
-
-                driver.find_element(By.XPATH, '//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[2]/form/fieldset/div/div[5]/button[2]').click()
-                sleep(2)
-
-                driver.find_element(By.CSS_SELECTOR, '#selClassDetail > div.lui-select__title').click()
-                sleep(1)
-                elements = driver.find_elements(By.CSS_SELECTOR, '#selClassDetail > div.lui-select__option > label')
-                sleep(2)
-
-                for index in elements:
-                    if index.text == character_class:
-                        index.click()
-
-                if parts == '목걸이':
-                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[1]').click()
-                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[2]/label[11]').click()
-                elif parts == '귀걸이':
-                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[1]').click()
-                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[2]/label[12]').click()
-                elif parts == '반지':
-                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[1]').click()
-                    driver.find_element(By.XPATH, '//*[@id="selCategoryDetail"]/div[2]/label[13]').click()
-
-                driver.find_element(By.XPATH,
-                                    '//*[@id="modal-deal-option"]/div/div/div[1]/div[1]/table/tbody/tr[4]/td[2]/div/div[1]').click()
-                sleep(1)
-
-                driver.find_element(By.XPATH,
-                                    '//*[@id="modal-deal-option"]/div/div/div[1]/div[1]/table/tbody/tr[4]/td[2]/div/div[2]/label[7]').click()
-
-                driver.find_element(By.CSS_SELECTOR, '#selEtc_0 > div.lui-select__title').click()
-                driver.find_element(By.CSS_SELECTOR,
-                                    '#selEtc_0 > div.lui-select__option > label:nth-child(2)').click()
-                sleep(1)
-
-                driver.find_element(By.CSS_SELECTOR, '#selEtcSub_0 > div.lui-select__title').click()
-                elements = driver.find_elements(By.CSS_SELECTOR, '#selEtcSub_0 > div.lui-select__option > label')
-
-                for index in elements:
-                    if index.text == status1:
-                        index.click()
-                sleep(1)
-
-                if status2 != "없음":
-                    driver.find_element(By.CSS_SELECTOR, '#selEtc_1 > div.lui-select__title').click()
-                    driver.find_element(By.CSS_SELECTOR,
-                                        '#selEtc_1 > div.lui-select__option > label:nth-child(2)').click()
-                    sleep(1)
-
-                    driver.find_element(By.CSS_SELECTOR, '#selEtcSub_1 > div.lui-select__title').click()
-                    elements = driver.find_elements(By.CSS_SELECTOR,
-                                                    '#selEtcSub_1 > div.lui-select__option > label')
-
-                    for index in elements:
-                        if index.text == status2:
-                            index.click()
-                    sleep(1)
-
-                driver.find_element(By.CSS_SELECTOR, '#selEtc_2 > div.lui-select__title').click()
-                driver.find_element(By.CSS_SELECTOR, '#selEtc_2 > div.lui-select__option > label:nth-child(3)').click()
-
-                sleep(1)
-                driver.find_element(By.CSS_SELECTOR, '#selEtcSub_2 > div.lui-select__title').click()
-                elements = driver.find_elements(By.CSS_SELECTOR, '#selEtcSub_2 > div.lui-select__option > label')
-
-                sleep(1)
-                for index in elements:
-                    if index.text == engrave1:
-                        index.click()
-
-                driver.find_element(By.CSS_SELECTOR, '#txtEtcMin_2').send_keys(engrave_val1)
-                sleep(2)
-
-                if engrave2 != "없음":
-                    driver.find_element(By.CSS_SELECTOR, '#selEtc_3 > div.lui-select__title').click()
-                    driver.find_element(By.CSS_SELECTOR,
-                                        '#selEtc_3 > div.lui-select__option > label:nth-child(3)').click()
-
-                    sleep(1)
-                    driver.find_element(By.CSS_SELECTOR, '#selEtcSub_3 > div.lui-select__title').click()
-                    elements = driver.find_elements(By.CSS_SELECTOR,
-                                                    '#selEtcSub_3 > div.lui-select__option > label')
-
-                    sleep(1)
-                    for index in elements:
-                        if index.text == engrave2:
-                            index.click()
-
-                    sleep(1)
-                    driver.find_element(By.CSS_SELECTOR, '#txtEtcMin_3').send_keys(engrave2_val)
-
-                sleep(5)
-                driver.find_element(By.CSS_SELECTOR,
-                                    '#modal-deal-option > div > div > div.lui-modal__button > button.lui-modal__search').click()
-                sleep(30)
-
-
-            except Exception as error:
-                return
-
-
-
-    # 데이터테이블 만드는 내부 메서드
+    # 데이터 테이블 만드는 내부 메서드
     def __make_table(self, data_list):
         output = PrettyTable()
 
@@ -273,31 +235,12 @@ class MarketHandler(commands.Cog):
 
         return output
 
-    def __get_data_from_bookmark(self):
-        driver = self.__get_driver()
-        driver.get('https://lostark.game.onstove.com/Market/BookMark')
+    def __get_data_from_csv(self):
+        path = r"/home/sehun5515/DataCrawler/data/output/Total_data.csv"
 
-        is_success = self.__log_in_process(driver)
-
-        if not is_success:
-            driver.quit()
-            return None
-
-        sleep(2)
-
-        price_data = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
-        sleep(1)
-        driver.find_element(By.XPATH, '//*[@id="marketList"]/div[2]/a[3]').click()
-
-        sleep(2)
-        price_data2 = driver.find_element(By.XPATH, '//*[@id="tbodyItemList"]').text
-
-        data_price = price_data + '\n' + price_data2
-        data_price_list = data_price.split('\n')
-
-        driver.quit()
-
-        self.update_time = datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
+        with open(path, 'r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            data_price_list = list(reader)
 
         return data_price_list
 
@@ -377,22 +320,32 @@ class MarketHandler(commands.Cog):
     # 데이터 크롤링 준비 메서드2
     def __get_driver(self):
         chrome_options = webdriver.ChromeOptions()
-        #chrome_options.add_argument("--headless")
-        #chrome_options.add_argument("--disable-dev-shm-usage")
-        #chrome_options.add_argument("--no-sandbox")
-        #chrome_options.add_argument("--disable-gpu")
-        #chrome_options.add_argument("--window-size=1920, 1080")
-        #chrome_options.add_argument("--remote-debugging-port=9222")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920, 1080")
 
         # live service
-        # driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
+        driver = webdriver.Chrome('./chromedriver', chrome_options=chrome_options)
 
         # ====================== testing service ==================================
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
+        # service = Service(ChromeDriverManager().install())
+        # driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
         # ====================== testing service end ==============================
 
         return driver
+
+    def __get_nickname(self):
+        path = "./data/nickname.csv"
+
+        with open(path, 'r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            nickname_data = list(reader)
+
+        file.close()
+
+        return nickname_data
 
 
 def setup(bot):

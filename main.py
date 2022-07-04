@@ -1,6 +1,3 @@
-import discord
-import os
-import asyncio
 import pandas as pd
 from discord.ext import commands
 
@@ -8,7 +5,7 @@ client = commands.Bot(command_prefix='!')
 path = "data/token.txt"
 token_df = pd.read_csv(path)
 token = 0
-bot_execute_flag = False
+bot_execute_flag = True
 
 extensionUnit = ['cogs.CalenderHandler', 'cogs.CommonContentHandler',
                  'cogs.BotEventHandler', 'cogs.PlayerContentHandler',
