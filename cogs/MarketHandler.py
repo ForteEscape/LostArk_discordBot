@@ -36,7 +36,7 @@ class MarketHandler(commands.Cog):
                     return
 
                 print("load success")
-                load_time = datetime.datetime.now(timezone('Asia/Seoul'))
+                print(self.update_time)
 
                 '''
                 announcement function
@@ -52,7 +52,7 @@ class MarketHandler(commands.Cog):
                 '''
 
                 self.price_data_list = data_price_list
-                self.update_time = load_time
+                #self.update_time = load_time
 
             except Exception as error:
                 print(error)
@@ -65,8 +65,8 @@ class MarketHandler(commands.Cog):
         if data == '':
             embed = discord.Embed(title="!경매 명령어 설명",
                                   description="!경매 명령어에 대하여 설명합니다.")
-            embed.add_field(name="!경매 [파티 인원] [아이템 이름]",
-                            value="경매 가격에 대한 입찰가를 출력합니다\n")
+            embed.add_field(name="!경매 [파티 인원] [아이템 이름]or[골드]",
+                            value="경매 가격에 대한 적정 입찰가를 출력합니다\n")
             await ctx.send(embed=embed)
         else:
             party = data.split(' ')[0]
@@ -108,28 +108,29 @@ class MarketHandler(commands.Cog):
             # 경매가 계산 및 디스코드 출력
             if party == '4' or party == '4인':
                 bid_gold, bid_before_gold = self.__calculate_bidgold(4, gold_data)
-                embed = discord.Embed(title="경매가 결과")
+                embed = discord.Embed(title="경매가 계산 결과")
 
                 if not is_data_digit:
-                    embed.add_field(name=orig_data + " 에 대한 4인 입찰 가격",
-                                    value="4인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(bid_gold) + "골드 까지입니다.\n")
+                    embed.add_field(name=orig_data + " 에 대한 4인 입찰 추천 가격",
+                                    value="4인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드\n 4인 분배 입찰 골드는 " +
+                                          str(bid_gold) + "골드 입니다.\n")
                 else:
-                    embed.add_field(name=str(gold_data) + "골드 에 대한 4인 입찰 가격",
-                                    value="4인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(
-                                        bid_gold) + "골드 까지입니다.\n")
+                    embed.add_field(name=str(gold_data) + "골드 에 대한 4인 입찰 추천 가격",
+                                    value="4인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드\n 4인 분배 입찰 골드는 "
+                                          + str(bid_gold) + "골드 입니다.\n")
                 await ctx.send(embed=embed)
             elif party == '8' or party == '8인':
                 bid_gold, bid_before_gold = self.__calculate_bidgold(8, gold_data)
-                embed = discord.Embed(title="경매가 결과")
+                embed = discord.Embed(title="경매가 계산 결과")
 
                 if not is_data_digit:
-                    embed.add_field(name=orig_data + " 에 대한 8인 입찰 가격",
-                                    value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(
-                                        bid_gold) + "골드 까지입니다.\n")
+                    embed.add_field(name=orig_data + " 에 대한 8인 입찰 추천 가격",
+                                    value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드\n 8인 분배 입찰 골드는 " +
+                                          str(bid_gold) + "골드 입니다.\n")
                 else:
-                    embed.add_field(name=str(gold_data) + "골드 에 대한 8인 입찰 가격",
-                                    value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드, 최대 " + str(
-                                        bid_gold) + "골드 까지입니다.\n")
+                    embed.add_field(name=str(gold_data) + "골드 에 대한 8인 입찰 추천 가격",
+                                    value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드\n 8인 분배 입찰 골드는 " +
+                                          str(bid_gold) + "골드 입니다.\n")
                 await ctx.send(embed=embed)
 
     def __calculate_bidgold(self, party_type, gold_data):
@@ -149,21 +150,38 @@ class MarketHandler(commands.Cog):
         return bid_gold, bid_before_gold
 
     @commands.command()
-    async def 시세요약(self, ctx):
+    async def 시세요약(self, ctx, *label_name):
         """
         클래스 필드의 price_data_list에 값이 없을 시 위에 했던 데이터 크롤링을 실시한다.
         만약 존재할 시 해당 값을 바로 출력함으로서 로그인 - 데이터 크롤링 과정을 모두 생략하여 속도를 높인다.
+
+        명령어 수정 예정, 수정 사항은 https://github.com/ForteEscape/LostArk_discordBot/issues/1 확인
         """
-        if not self.price_data_list:
-            data_price_list = self.__get_data_from_csv()
+        label = ' '.join(label_name)
+        label_data_list = []
+        labeled_price_list = []
 
-            if data_price_list is None:
-                await ctx.send("거래소에 접속할 수 없습니다. 점검중이거나 서버 문제일 수 있습니다.")
-                return
+        data_price_list = self.__get_data_from_csv()
 
+        if data_price_list is None:
+            await ctx.send("거래소에 접속할 수 없습니다. 점검중이거나 서버 문제일 수 있습니다.")
+            return
+
+        if label == '':
             self.price_data_list = data_price_list
+        else:
+            label_data_list = self.__get_label_list(label)
 
-        output = self.__make_table(self.price_data_list)
+        if not label_data_list:
+            output = self.__make_table(self.price_data_list)
+        else:
+            for element in data_price_list:
+                if element[0] in label_data_list:
+                    labeled_price_list.append(element)
+
+            self.price_data_list = labeled_price_list
+            output = self.__make_table(self.price_data_list)
+
         await ctx.send(f"```\n{output}\n```")
         await ctx.send("데이터 최신화 시각 : " + self.update_time)
 
@@ -212,6 +230,9 @@ class MarketHandler(commands.Cog):
 
                     data_2d_list = self.__data_processing(data_price_list)
                     output = self.__make_table(data_2d_list)
+
+                await ctx.send(f"```\n{output}\n```")
+                await ctx.send("데이터 최신화 시각 : " + self.update_time)
             else:
                 data_price_list = self.__get_data_from_market(input_data)
 
@@ -222,7 +243,9 @@ class MarketHandler(commands.Cog):
                 data_2d_list = self.__data_processing(data_price_list)
                 output = self.__make_table(data_2d_list)
 
-            await ctx.send(f"```\n{output}\n```")
+                await ctx.send(f"```\n{output}\n```")
+                await ctx.send("데이터 최신화 시각 : " +
+                               str(datetime.datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')))
 
     # 데이터 테이블 만드는 내부 메서드
     def __make_table(self, data_list):
@@ -236,11 +259,23 @@ class MarketHandler(commands.Cog):
         return output
 
     def __get_data_from_csv(self):
-        path = r"/home/sehun5515/DataCrawler/data/output/Total_data.csv"
+        # test service function
+        # data_path = "C:/Users/sehunkim/Desktop/MarketCrawler/data/output/Total_data.csv"
+        # time_path = "C:/Users/sehunkim/Desktop/MarketCrawler/data/output/time_data.txt"
 
-        with open(path, 'r', encoding='utf-8') as file:
+        #live service function
+        data_path = r"/home/sehun5515/DataCrawler/data/output/Total_data.csv"
+        time_path = r"/home/sehun5515/DataCrawler/data/output/time_data.txt"
+        
+        with open(data_path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             data_price_list = list(reader)
+        file.close()
+
+        with open(time_path, 'r', encoding='utf-8') as file:
+            reader = file.readline()
+            self.update_time = reader
+        file.close()
 
         return data_price_list
 
@@ -346,6 +381,29 @@ class MarketHandler(commands.Cog):
         file.close()
 
         return nickname_data
+
+    def __get_label_list(self, label):
+        label_data_list = []
+
+        if label == '강화재료' or label == '재련재료' or label == '재료':
+            label_data_list = ['상레하', '중레하', '하레하', '파강석', '파결석', '명돌', '위명돌', '경명돌', '가호', '축복', '은총',
+                               '명파(소)', '명파(중)', '명파(대)']
+        elif label == '각인' or label == '각인서':
+            label_data_list = [
+                '원한', '예둔', '돌대', '전문의', '바리', '타대', '아드', '저받', '정흡', '급타', '중갑', '결대',
+                '기습', '질증', '각성', '슈차', '정단']
+        elif label == '베템' or label == '수류탄' or label == '폭탄':
+            label_data_list = ['회수', '화수', '암수', '부식', '파폭']
+        elif label == '명파':
+            label_data_list = ['명파(소)', '명파(중)', '명파(대)']
+        elif label == '돌파석':
+            label_data_list = ['명돌', '위명돌', '경명돌']
+        elif label == '물약':
+            label_data_list = ['아드로핀', '시정', '각물']
+        elif label == '숨결' or label == '숨':
+            label_data_list = ['가호', '축복', '은총']
+
+        return label_data_list
 
 
 def setup(bot):
