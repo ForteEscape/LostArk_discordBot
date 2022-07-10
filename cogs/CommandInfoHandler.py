@@ -26,11 +26,6 @@ class CommandInfoHandler(commands.Cog):
                               "ex) !군단장 발탄",
                         inline=False)
 
-        embed.add_field(name="!이벤트",
-                        value="현재 진행되는 이벤트가 모인 이벤트 페이지 링크를 호출합니다.\n"
-                              "ex) !이벤트",
-                        inline=False)
-
         embed.add_field(name="!어비스던전 [오레하의우물, 오레하, 낙원의문, 낙원]",
                         value="각 어비스 던전의 정보를 호출합니다.\n"
                               "ex) !어비스던전 오레하 or !어비스던전 오레하의우물",
@@ -46,9 +41,24 @@ class CommandInfoHandler(commands.Cog):
                               "ex) !캐릭터정보 나비릴",
                         inline=False)
 
-        embed.add_field(name="!가이드 [육성, 아이템, 각인, 골드]",
-                        value="게임 시스템 및 여러가지 가이드 정보 링크를 호출합니다.\n"
-                              "ex) !가이드 각인",
+        embed.add_field(name="!경매 [파티인원] [가격 또는 각인서 이름]",
+                        value="물품 금액에 대한 적절한 경매 입찰가를 출력합니다.\n"
+                              "ex) !경매 4인 4800, !경매 8인 저받",
+                        inline=False)
+
+        embed.add_field(name="!시세요약 [범주]",
+                        value="입력된 범주에 대한 시세가를 요약하여 출력합니다. 범주에 아무것도 없을 시 모든 데이터를 출력합니다.\n"
+                              "ex) !시세요약, !시세요약 돌파석, !시세요약 재련재료",
+                        inline=False)
+
+        embed.add_field(name="!시세 [물품 이름]",
+                        value="입력된 물품에 대한 시세를 검색하여 출력합니다. 축약어도 가능합니다.\n"
+                              "ex) !시세 저주받은 인형, !시세 돌격대장",
+                        inline=False)
+
+        embed.add_field(name="!각인 [각인 이름]",
+                        value="입력된 각인에 대한 정보를 출력합니다. 축약어도 가능합니다.\n"
+                              "ex) !각인 저주받은 인형, !각인 돌대",
                         inline=False)
 
         embed.set_footer(text="건의사항 추가사항 받기 가능 그러나 반영 매우 늦음."
