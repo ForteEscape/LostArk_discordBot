@@ -173,7 +173,12 @@ class MarketHandler(commands.Cog):
             label_data_list = self.__get_label_list(label)
 
         if not label_data_list:
-            output = self.__make_table(self.price_data_list)
+            output = self.__make_table(self.price_data_list[:-20])
+            await ctx.send(f"```\n{output}\n```")
+            output = self.__make_table(self.price_data_list[-20:])
+            await ctx.send(f"```\n{output}\n```")
+            await ctx.send("데이터 최신화 시각 : " + self.update_time)
+            return
         else:
             for element in data_price_list:
                 if element[0] in label_data_list:
@@ -402,6 +407,9 @@ class MarketHandler(commands.Cog):
             label_data_list = ['아드로핀', '시정', '각물']
         elif label == '숨결' or label == '숨':
             label_data_list = ['가호', '축복', '은총']
+        elif label == '직각' or label == '직업 각인서':
+            label_data_list = ['초심', '절제', '고기', '화강', '충단', '절정', '갈증', '환류', '절구', '체술', '축오', '잔재',
+                               '분망', '버스트', '점화', '충동', '만개', '일필', '질풍', '이슬비']
 
         return label_data_list
 
