@@ -14,6 +14,5 @@ class BotEventHandler(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             await ctx.send("No such command")
 
-
 def setup(bot):
     bot.add_cog(BotEventHandler(bot))

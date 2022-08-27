@@ -24,35 +24,23 @@ class MarketHandler(commands.Cog):
     @tasks.loop(seconds=1)
     async def get_price_data(self):
         """
-        매 시간 20분과 50분에 거래소 관심목록 데이터를 크롤링한다. 크롤링한 데이터를 가공하여 클래스 필드에 넣는다.
+        매 시간에 거래소 관심목록 데이터를 크롤링한다. 크롤링한 데이터를 가공하여 클래스 필드에 넣는다.
         """
         chk_time = datetime.datetime.now(timezone('Asia/Seoul'))
 
-        if (chk_time.minute == 21 and chk_time.second == 0) or (chk_time.minute == 51 and chk_time.second == 0):
+        if chk_time.minute == 1 and chk_time.second == 0:
             try:
                 data_price_list = self.__get_data_from_csv()
 
                 if data_price_list is None:
+                    print("datalist empty")
                     return
 
                 print("load success")
                 print(self.update_time)
 
-                '''
-                announcement function
-                if not self.is_alamed:
-                    self.is_alamed = True
-
-                    embed = discord.Embed(title="점검 알림")
-                    embed.add_field(name="점검 내용",
-                                    value="점검 시간: 11:20 ~ 별도 안내 까지\n"
-                                          "점검 동안 봇 서비스가 간헐적으로 중단되거나 전면 중단될 수 있습니다.\n")
-                    channel = self.bot.get_channel(id)
-                    await channel.send(embed=embed)
-                '''
-
                 self.price_data_list = data_price_list
-                #self.update_time = load_time
+                # self.update_time = load_time
 
             except Exception as error:
                 print(error)
@@ -65,12 +53,11 @@ class MarketHandler(commands.Cog):
         if data == '':
             embed = discord.Embed(title="!경매 명령어 설명",
                                   description="!경매 명령어에 대하여 설명합니다.")
-            embed.add_field(name="!경매 [파티 인원] [아이템 이름]or[골드]",
+            embed.add_field(name="!경매 [아이템 이름]or[골드]",
                             value="경매 가격에 대한 적정 입찰가를 출력합니다\n")
             await ctx.send(embed=embed)
         else:
-            party = data.split(' ')[0]
-            gold_data = data.split(' ')[1]
+            gold_data = data.split(' ')[0]
             orig_data = gold_data
 
             is_data_digit = True
@@ -104,8 +91,33 @@ class MarketHandler(commands.Cog):
             else:
                 # 아니라면, text-format 형식을 int로 변환
                 gold_data = int(gold_data)
-                
+
+            bid_gold_raid, bid_before_gold_raid = self.__calculate_bidgold(8, gold_data)
+            bid_gold_party, bid_before_gold_party = self.__calculate_bidgold(4, gold_data)
+
             # 경매가 계산 및 디스코드 출력
+            embed = discord.Embed(title="경매가 계산 결과")
+
+            if not is_data_digit:
+                embed.add_field(name=orig_data + " 에 대한 경매 입찰 추천 가격",
+                                value="4인 입찰 추천 경매가는 " + str(bid_before_gold_party) + "골드\n 4인 분배 입찰 골드는 " +
+                                      str(bid_gold_party) + "골드 입니다.\n")
+                embed.add_field(name=str(orig_data) + " 에 대한 8인 경매 입찰 추천 가격",
+                                value="8인 입찰 추천 경매가는 " + str(bid_before_gold_raid) + "골드\n 8인 분배 입찰 골드는 "
+                                      + str(bid_gold_raid) + "골드 입니다.\n")
+            else:
+                embed.add_field(name=str(orig_data) + "골드 에 대한 4인 경매 입찰 추천 가격",
+                                value="4인 입찰 추천 경매가는 " + str(bid_before_gold_party) + "골드\n 4인 분배 입찰 골드는 " +
+                                      str(bid_gold_party) + "골드 입니다.\n")
+
+                embed.add_field(name=str(orig_data) + "골드 에 대한 8인 경매 입찰 추천 가격",
+                                value="8인 입찰 추천 경매가는 " + str(bid_before_gold_raid) + "골드\n 8인 분배 입찰 골드는 "
+                                      + str(bid_gold_raid) + "골드 입니다.\n")
+
+            await ctx.send(embed=embed)
+
+            # 경매가 계산 및 디스코드 출력 구형
+            """
             if party == '4' or party == '4인':
                 bid_gold, bid_before_gold = self.__calculate_bidgold(4, gold_data)
                 embed = discord.Embed(title="경매가 계산 결과")
@@ -132,6 +144,7 @@ class MarketHandler(commands.Cog):
                                     value="8인 입찰 추천 경매가는 " + str(bid_before_gold) + "골드\n 8인 분배 입찰 골드는 " +
                                           str(bid_gold) + "골드 입니다.\n")
                 await ctx.send(embed=embed)
+                """
 
     def __calculate_bidgold(self, party_type, gold_data):
         bid_gold, bid_before_gold = 0, 0
@@ -344,9 +357,9 @@ class MarketHandler(commands.Cog):
     # 데이터 크롤링 준비 메서드
     def __log_in_process(self, driver):
         try:
-            driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('sehun8631@naver.com')
+            driver.find_element(By.XPATH, '//*[@id="user_id"]').send_keys('-')
             sleep(2)
-            driver.find_element(By.XPATH, '//*[@id="user_pwd"]').send_keys('kk2924140**')
+            driver.find_element(By.XPATH, '//*[@id="user_pwd"]').send_keys('-')
             sleep(2)
             driver.find_element(By.XPATH, '//*[@id="idLogin"]/div[4]/button/span').click()
 
