@@ -3,7 +3,8 @@ LOA_help 디스코드 봇
 
 ### LOA_help 봇은 제작자가 로스트아크 게임 정보를 찾기가 너무 귀찮아
 ### 디스코드 봇에 집약시켜 간단히 명령어로 정보를 제공 받기 가능하도록 만든 디스코드 봇입니다.
-### discord.py 2.0 업데이트로 인해 대부분의 구조가 바뀌어 해당 레포지토리는 Archive로 전환합니다
+### discord.py 2.0 업데이트로 인해 대부분의 구조가 바뀌어 해당 레포지토리는 Archive로 전환합니다 2.0에 맞춘 봇 레포지토리는 다음 링크에 있습니다.
+### https://github.com/ForteEscape/LostArk_discordBot_2.0
 
 <br><hr/><br>
 
